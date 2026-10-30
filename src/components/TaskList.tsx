@@ -1,17 +1,16 @@
 import type { Task } from '../types/task';
 import { TaskItem } from './TaskItem';
-import type { FilterType } from '../App';
 
 interface TaskListProps {
   tasks: Task[];
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
-  currentFilter: FilterType;
+  hasAnyTasks: boolean; // Новий пропс
 }
 
-export function TaskList({ tasks, onToggle, onDelete, currentFilter }: TaskListProps) {
-  // Якщо масив порожній і обрано фільтр "Всі" (або завдань ще не створювали)
-  if (tasks.length === 0 && currentFilter === 'all') {
+export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListProps) {
+  // Якщо завдань взагалі не існує
+  if (!hasAnyTasks) {
     return (
       <div className="task-list__empty">
         Завдань поки немає. Додайте перше навчальне завдання.
@@ -19,7 +18,7 @@ export function TaskList({ tasks, onToggle, onDelete, currentFilter }: TaskListP
     );
   }
 
-  // Якщо масив порожній, але обрано специфічний фільтр
+  // Якщо завдання є, але не підходять під поточні фільтри
   if (tasks.length === 0) {
     return (
       <div className="task-list__empty">

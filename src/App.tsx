@@ -4,23 +4,20 @@ import { initialTasks } from './data/initialTasks';
 import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
 import { TaskFilters } from './components/TaskFilters';
+import { TaskStats } from './components/TaskStats'; // Повернули імпорт
 import { TaskList } from './components/TaskList';
 
 export type FilterType = 'all' | 'completed' | 'uncompleted';
 
-// Вага пріоритетів для сортування
 const priorityWeight = { high: 3, medium: 2, low: 1 };
 
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [filter, setFilter] = useState<FilterType>('all');
-  
-  // Нові стани для додаткових завдань
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [sortByPriority, setSortByPriority] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-  // Перемикання темної теми на рівні HTML-документа
   useEffect(() => {
     if (isDarkTheme) {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -44,17 +41,14 @@ export default function App() {
     setTasks(tasks.filter(t => t.id !== id));
   };
 
-  // Комплексна фільтрація та сортування
-  let processedTasks = tasks.filter((task) => {
-    // 1. Фільтр за статусом
+  // Виправлено: const замість let
+  const processedTasks = tasks.filter((task) => {
     if (filter === 'completed' && !task.completed) return false;
     if (filter === 'uncompleted' && task.completed) return false;
-    // 2. Фільтр за категорією
     if (selectedCategory && task.category !== selectedCategory) return false;
     return true;
   });
 
-  // 3. Сортування (mutates the newly created filtered array, which is safe)
   if (sortByPriority) {
     processedTasks.sort((a, b) => priorityWeight[b.priority] - priorityWeight[a.priority]);
   }
@@ -65,7 +59,9 @@ export default function App() {
       <main className="app__main">
         <TaskForm onAdd={addTask} existingCategories={uniqueCategories} />
         
-        {/* Додані нові пропси для керування сортуванням і категоріями */}
+        {/* Повернули компонент статистики згідно з вимогою */}
+        <TaskStats tasks={tasks} />
+        
         <TaskFilters 
           currentFilter={filter} 
           onFilterChange={setFilter} 
@@ -75,18 +71,13 @@ export default function App() {
           onCategoryChange={setSelectedCategory}
           sortByPriority={sortByPriority}
           onSortChange={setSortByPriority}
-          onResetFilters={() => {
-            setFilter('all');
-            setSelectedCategory('');
-            setSortByPriority(false);
-          }}
         />
         
         <TaskList 
           tasks={processedTasks} 
           onToggle={toggleTaskStatus} 
           onDelete={deleteTask} 
-          currentFilter={filter}
+          hasAnyTasks={tasks.length > 0} // Передаємо індикатор наявності хоча б одного завдання
         />
       </main>
     </div>

@@ -10,19 +10,16 @@ interface TaskFiltersProps {
   onCategoryChange: (category: string) => void;
   sortByPriority: boolean;
   onSortChange: (sort: boolean) => void;
-  onResetFilters: () => void;
 }
 
 export function TaskFilters({ 
   currentFilter, onFilterChange, tasks, 
   categories, selectedCategory, onCategoryChange,
-  sortByPriority, onSortChange, onResetFilters
+  sortByPriority, onSortChange 
 }: TaskFiltersProps) {
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
   const uncompletedCount = totalCount - completedCount;
-  const hasActiveFilters =
-    currentFilter !== 'all' || selectedCategory !== '' || sortByPriority;
 
   return (
     <div className="controls">
@@ -34,16 +31,16 @@ export function TaskFilters({
           Всі ({totalCount})
         </button>
         <button 
-          className={`task-filters__btn ${currentFilter === 'uncompleted' ? 'task-filters__btn--active' : ''}`}
-          onClick={() => onFilterChange('uncompleted')}
-        >
-          Не виконані ({uncompletedCount})
-        </button>
-        <button 
           className={`task-filters__btn ${currentFilter === 'completed' ? 'task-filters__btn--active' : ''}`}
           onClick={() => onFilterChange('completed')}
         >
           Виконані ({completedCount})
+        </button>
+        <button 
+          className={`task-filters__btn ${currentFilter === 'uncompleted' ? 'task-filters__btn--active' : ''}`}
+          onClick={() => onFilterChange('uncompleted')}
+        >
+          Не виконані ({uncompletedCount})
         </button>
       </div>
 
@@ -67,14 +64,6 @@ export function TaskFilters({
           />
           Сортувати за пріоритетом
         </label>
-
-        <button
-          type="button"
-          className={`extra-filters__reset ${hasActiveFilters ? 'extra-filters__reset--active' : ''}`}
-          onClick={onResetFilters}
-        >
-          Скинути фільтри
-        </button>
       </div>
     </div>
   );
