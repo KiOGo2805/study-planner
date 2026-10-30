@@ -88,7 +88,7 @@ export function TaskFilters({
           }`}
           onClick={onResetFilters}
         >
-          {hasActiveFilters ? 'Скинути фільтри (активні)' : 'Скинути фільтри'}
+          {'Скинути фільтри'}
         </button>
       </div>
     </div>
