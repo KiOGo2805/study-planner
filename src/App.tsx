@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Task, Priority } from './types/task';
+import type { Task } from './types/task';
 import { initialTasks } from './data/initialTasks';
 import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
