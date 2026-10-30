@@ -72,7 +72,7 @@ export function TaskFilters({
           className={`extra-filters__reset ${hasActiveFilters ? 'extra-filters__reset--active' : ''}`}
           onClick={onResetFilters}
         >
-          {hasActiveFilters ? 'Скинути фільтри (активні)' : 'Скинути фільтри'}
+          {'Скинути фільтри'}
         </button>
       </div>
     </div>
