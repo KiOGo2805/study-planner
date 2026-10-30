@@ -75,6 +75,11 @@ export default function App() {
           onCategoryChange={setSelectedCategory}
           sortByPriority={sortByPriority}
           onSortChange={setSortByPriority}
+          onResetFilters={() => {
+            setFilter('all');
+            setSelectedCategory('');
+            setSortByPriority(false);
+          }}
         />
         
         <TaskList 

@@ -141,6 +141,35 @@ body {
     font-size: 0.9rem;
     cursor: pointer;
   }
+
+  &__reset {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text-main);
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+
+    &:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    &--active {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+
+      &:hover {
+        border-color: var(--primary-hover);
+        background: var(--primary-hover);
+        color: #fff;
+      }
+    }
+  }
 }
 
 .task-filters__btn {
