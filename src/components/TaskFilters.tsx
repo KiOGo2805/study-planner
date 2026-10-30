@@ -31,16 +31,16 @@ export function TaskFilters({
           Всі ({totalCount})
         </button>
         <button 
-          className={`task-filters__btn ${currentFilter === 'completed' ? 'task-filters__btn--active' : ''}`}
-          onClick={() => onFilterChange('completed')}
-        >
-          Виконані ({completedCount})
-        </button>
-        <button 
           className={`task-filters__btn ${currentFilter === 'uncompleted' ? 'task-filters__btn--active' : ''}`}
           onClick={() => onFilterChange('uncompleted')}
         >
           Не виконані ({uncompletedCount})
+        </button>
+        <button 
+          className={`task-filters__btn ${currentFilter === 'completed' ? 'task-filters__btn--active' : ''}`}
+          onClick={() => onFilterChange('completed')}
+        >
+          Виконані ({completedCount})
         </button>
       </div>
 
