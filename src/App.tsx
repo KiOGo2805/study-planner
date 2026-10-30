@@ -13,6 +13,9 @@ export default function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [filter, setFilter] = useState<FilterType>('all');
 
+  // Отримуємо масив унікальних категорій для автозаповнення
+  const uniqueCategories = Array.from(new Set(tasks.map(t => t.category)));
+
   const addTask = (taskData: Omit<Task, 'id' | 'completed'>) => {
     const newTask: Task = {
       ...taskData,
@@ -34,27 +37,26 @@ export default function App() {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
-  // Обчислення відфільтрованого масиву
   const filteredTasks = tasks.filter((task) => {
     if (filter === 'completed') return task.completed;
     if (filter === 'uncompleted') return !task.completed;
-    return true; // для 'all'
+    return true; 
   });
 
   return (
     <div className="app">
       <Header />
       <main className="app__main">
-        <TaskForm onAdd={addTask} />
-        {/* Передаємо весь масив для розрахунку статистики */}
+        {/* Передаємо унікальні категорії */}
+        <TaskForm onAdd={addTask} existingCategories={uniqueCategories} />
         <TaskStats tasks={tasks} />
-        {/* Передаємо поточний фільтр та функцію зміни */}
-        <TaskFilters currentFilter={filter} onFilterChange={setFilter} />
+        {/* Передаємо масив tasks для лічильників */}
+        <TaskFilters currentFilter={filter} onFilterChange={setFilter} tasks={tasks} />
         <TaskList 
           tasks={filteredTasks} 
           onToggle={toggleTaskStatus} 
           onDelete={deleteTask} 
-          currentFilter={filter} // Передаємо для умовного рендерингу порожнього списку
+          currentFilter={filter}
         />
       </main>
     </div>

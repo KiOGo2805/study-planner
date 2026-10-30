@@ -13,18 +13,17 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
         <h3 className="task-item__title">{task.title}</h3>
         <p className="task-item__description">{task.description}</p>
         <div className="task-item__badges">
-          <span className="task-item__badge">{task.category}</span>
+          {/* Пріоритет тепер перший */}
           <span className={`task-item__badge task-item__badge--priority-${task.priority}`}>
             {task.priority}
           </span>
+          <span className="task-item__badge">{task.category}</span>
         </div>
       </div>
       <div className="task-item__actions">
-        {/* Виклик onToggle з id завдання */}
         <button className="task-item__btn" onClick={() => onToggle(task.id)}>
           {task.completed ? 'Повернути' : 'Виконати'}
         </button>
-        {/* Виклик onDelete з id завдання */}
         <button 
           className="task-item__btn task-item__btn--danger" 
           onClick={() => onDelete(task.id)}

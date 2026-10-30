@@ -3,9 +3,10 @@ import type { Priority, Task } from '../types/task';
 
 interface TaskFormProps {
   onAdd: (taskData: Omit<Task, 'id' | 'completed'>) => void;
+  existingCategories: string[];
 }
 
-export function TaskForm({ onAdd }: TaskFormProps) {
+export function TaskForm({ onAdd, existingCategories }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -14,10 +15,8 @@ export function TaskForm({ onAdd }: TaskFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Проста валідація: якщо назва порожня, не дозволяємо додати
     if (!title.trim()) return;
 
-    // Викликаємо функцію з App.tsx
     onAdd({
       title: title.trim(),
       description: description.trim(),
@@ -25,7 +24,6 @@ export function TaskForm({ onAdd }: TaskFormProps) {
       priority,
     });
 
-    // Очищаємо форму після додавання
     setTitle('');
     setDescription('');
     setCategory('');
@@ -55,11 +53,17 @@ export function TaskForm({ onAdd }: TaskFormProps) {
       <div className="task-form__group">
         <input
           type="text"
+          list="category-suggestions"
           placeholder="Категорія"
           className="task-form__input"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         />
+        <datalist id="category-suggestions">
+          {existingCategories.map((cat) => (
+            <option key={cat} value={cat} />
+          ))}
+        </datalist>
       </div>
       <div className="task-form__group">
         <select
