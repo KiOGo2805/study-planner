@@ -21,6 +21,7 @@ export function TaskFilters({
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
   const uncompletedCount = totalCount - completedCount;
+  const hasActiveFilters = currentFilter !== 'all' || selectedCategory !== '' || sortByPriority;
 
   return (
     <div className="controls">
@@ -68,10 +69,10 @@ export function TaskFilters({
 
         <button
           type="button"
-          className="extra-filters__reset"
+          className={`extra-filters__reset ${hasActiveFilters ? 'extra-filters__reset--active' : ''}`}
           onClick={onResetFilters}
         >
-          Скинути фільтри
+          {hasActiveFilters ? 'Скинути фільтри (активні)' : 'Скинути фільтри'}
         </button>
       </div>
     </div>
