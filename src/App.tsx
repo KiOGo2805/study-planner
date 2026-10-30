@@ -18,6 +18,12 @@ export default function App() {
   const [sortByPriority, setSortByPriority] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
+  const resetFilters = () => {
+    setFilter('all');
+    setSelectedCategory('');
+    setSortByPriority(false);
+  };
+
   useEffect(() => {
     if (isDarkTheme) {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -99,6 +105,7 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
           onCategoryChange={setSelectedCategory}
           sortByPriority={sortByPriority}
           onSortChange={setSortByPriority}
+          onResetFilters={resetFilters}
         />
         
         <TaskList 
