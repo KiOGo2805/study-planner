@@ -80,7 +80,7 @@ export function TaskFilters({
 
         <button
           type="button"
-          className="extra-filters__reset"
+          className="rounded-md border border-border bg-surface px-3 py-2 text-sm text-text transition-colors hover:border-primary hover:text-primary"
           onClick={onResetFilters}
         >
           Скинути фільтри
