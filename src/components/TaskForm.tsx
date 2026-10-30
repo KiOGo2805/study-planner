@@ -31,31 +31,31 @@ export function TaskForm({ onAdd, existingCategories }: TaskFormProps) {
   };
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <div className="task-form__group">
+    <form className="flex flex-wrap gap-4 rounded-lg bg-surface p-6 shadow-card" onSubmit={handleSubmit}>
+      <div className="min-w-[200px] flex-1">
         <input
           type="text"
           placeholder="Назва завдання (обов'язково)"
-          className="task-form__input"
+          className="w-full rounded-md border border-border bg-input p-3 text-text transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
       </div>
-      <div className="task-form__group">
+      <div className="min-w-[200px] flex-1">
         <input
           type="text"
           placeholder="Опис"
-          className="task-form__input"
+          className="w-full rounded-md border border-border bg-input p-3 text-text transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
-      <div className="task-form__group">
+      <div className="min-w-[200px] flex-1">
         <input
           type="text"
           list="category-suggestions"
           placeholder="Категорія"
-          className="task-form__input"
+          className="w-full rounded-md border border-border bg-input p-3 text-text transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         />
@@ -65,9 +65,9 @@ export function TaskForm({ onAdd, existingCategories }: TaskFormProps) {
           ))}
         </datalist>
       </div>
-      <div className="task-form__group">
+      <div className="min-w-[200px] flex-1">
         <select
-          className="task-form__select"
+          className="w-full rounded-md border border-border bg-input p-3 text-text focus:border-primary focus:outline-none"
           value={priority}
           onChange={(e) => setPriority(e.target.value as Priority)}
         >
@@ -76,7 +76,11 @@ export function TaskForm({ onAdd, existingCategories }: TaskFormProps) {
           <option value="high">Високий</option>
         </select>
       </div>
-      <button type="submit" className="task-form__submit" disabled={!title.trim()}>
+      <button
+        type="submit"
+        className="rounded-md bg-primary px-6 py-3 text-base font-medium text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={!title.trim()}
+      >
         Додати
       </button>
     </form>

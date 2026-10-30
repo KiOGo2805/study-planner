@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-page: var(--bg-color);
+  --color-surface: var(--card-bg);
+  --color-input: var(--input-bg);
+  --color-text: var(--text-main);
+  --color-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-danger: var(--danger);
+  --color-badge: var(--badge-bg);
+  --color-badge-text: var(--badge-text);
+  --color-priority-low: var(--badge-low-bg);
+  --color-priority-low-text: var(--badge-low-text);
+  --color-priority-medium: var(--badge-medium-bg);
+  --color-priority-medium-text: var(--badge-medium-text);
+  --color-priority-high: var(--badge-high-bg);
+  --color-priority-high-text: var(--badge-high-text);
+  --color-hover: var(--hover-bg);
+  --shadow-card: var(--shadow);
+}
+
+:root {
+  color-scheme: light;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --bg-color: #f9fafb;
+  --card-bg: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --danger: #ef4444;
+  --input-bg: #ffffff;
+  --badge-bg: #e5e7eb;
+  --badge-text: #374151;
+  --badge-low-bg: #dcfce7;
+  --badge-low-text: #166534;
+  --badge-medium-bg: #fef9c3;
+  --badge-medium-text: #854d0e;
+  --badge-high-bg: #fee2e2;
+  --badge-high-text: #991b1b;
+  --hover-bg: #f3f4f6;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-color: #111827;
+  --card-bg: #1f2937;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --border: #374151;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --input-bg: #374151;
+  --badge-bg: #374151;
+  --badge-text: #e5e7eb;
+  --badge-low-bg: #14532d;
+  --badge-low-text: #bbf7d0;
+  --badge-medium-bg: #713f12;
+  --badge-medium-text: #fef08a;
+  --badge-high-bg: #7f1d1d;
+  --badge-high-text: #fecaca;
+  --hover-bg: #374151;
+}
+
+@layer base {
+  body {
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+  }
+}

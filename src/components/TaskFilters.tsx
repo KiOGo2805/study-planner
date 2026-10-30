@@ -22,31 +22,43 @@ export function TaskFilters({
   const uncompletedCount = totalCount - completedCount;
 
   return (
-    <div className="controls">
-      <div className="task-filters">
+    <div className="flex flex-col gap-4 rounded-lg bg-surface p-6 shadow-card">
+      <div className="flex flex-wrap justify-center gap-3">
         <button 
-          className={`task-filters__btn ${currentFilter === 'all' ? 'task-filters__btn--active' : ''}`}
+          className={`rounded-full border px-5 py-2 font-medium transition-colors ${
+            currentFilter === 'all'
+              ? 'border-primary bg-primary text-white hover:text-white'
+              : 'border-border bg-surface text-muted hover:border-primary hover:text-primary'
+          }`}
           onClick={() => onFilterChange('all')}
         >
           Всі ({totalCount})
         </button>
         <button 
-          className={`task-filters__btn ${currentFilter === 'completed' ? 'task-filters__btn--active' : ''}`}
+          className={`rounded-full border px-5 py-2 font-medium transition-colors ${
+            currentFilter === 'completed'
+              ? 'border-primary bg-primary text-white hover:text-white'
+              : 'border-border bg-surface text-muted hover:border-primary hover:text-primary'
+          }`}
           onClick={() => onFilterChange('completed')}
         >
           Виконані ({completedCount})
         </button>
         <button 
-          className={`task-filters__btn ${currentFilter === 'uncompleted' ? 'task-filters__btn--active' : ''}`}
+          className={`rounded-full border px-5 py-2 font-medium transition-colors ${
+            currentFilter === 'uncompleted'
+              ? 'border-primary bg-primary text-white hover:text-white'
+              : 'border-border bg-surface text-muted hover:border-primary hover:text-primary'
+          }`}
           onClick={() => onFilterChange('uncompleted')}
         >
           Не виконані ({uncompletedCount})
         </button>
       </div>
 
-      <div className="extra-filters">
+      <div className="flex flex-wrap items-center justify-center gap-6 border-t border-border pt-4">
         <select 
-          className="extra-filters__select"
+          className="rounded-md border border-border bg-input p-2 text-text focus:border-primary focus:outline-none"
           value={selectedCategory}
           onChange={(e) => onCategoryChange(e.target.value)}
         >
@@ -56,7 +68,7 @@ export function TaskFilters({
           ))}
         </select>
         
-        <label className="extra-filters__sort">
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-text">
           <input 
             type="checkbox" 
             checked={sortByPriority}

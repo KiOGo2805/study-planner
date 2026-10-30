@@ -12,7 +12,7 @@ export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListPro
   // Якщо завдань взагалі не існує
   if (!hasAnyTasks) {
     return (
-      <div className="task-list__empty">
+      <div className="rounded-lg border-2 border-dashed border-border bg-surface p-12 text-center text-muted">
         Завдань поки немає. Додайте перше навчальне завдання.
       </div>
     );
@@ -21,14 +21,14 @@ export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListPro
   // Якщо завдання є, але не підходять під поточні фільтри
   if (tasks.length === 0) {
     return (
-      <div className="task-list__empty">
+      <div className="rounded-lg border-2 border-dashed border-border bg-surface p-12 text-center text-muted">
         За цим фільтром завдань немає.
       </div>
     );
   }
 
   return (
-    <ul className="task-list">
+    <ul className="flex list-none flex-col gap-4">
       {tasks.map((task) => (
         <TaskItem 
           key={task.id} 

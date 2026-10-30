@@ -1,5 +1,11 @@
 import type { Task } from '../types/task';
 
+const priorityClasses = {
+  low: 'bg-priority-low text-priority-low-text',
+  medium: 'bg-priority-medium text-priority-medium-text',
+  high: 'bg-priority-high text-priority-high-text',
+};
+
 interface TaskItemProps {
   task: Task;
   onToggle: (id: number) => void;
@@ -15,19 +21,25 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   };
 
   return (
-    <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
-      <div className="task-item__content">
-        <h3 className="task-item__title">{task.title}</h3>
-        <p className="task-item__description">{task.description}</p>
-        <div className="task-item__badges">
-          <span className={`task-item__badge task-item__badge--priority-${task.priority}`}>
+    <li className={`flex items-start justify-between gap-6 rounded-lg bg-surface p-6 shadow-card transition-[opacity,transform] ${task.completed ? 'opacity-70' : ''}`}>
+      <div className="min-w-0 flex-1">
+        <h3 className={`mb-2 text-xl font-semibold ${task.completed ? 'text-muted line-through' : 'text-text'}`}>
+          {task.title}
+        </h3>
+        <p className={`mb-4 ${task.completed ? 'text-muted line-through' : 'text-muted'}`}>
+          {task.description}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <span className={`rounded-xl px-3 py-1 text-xs font-medium ${priorityClasses[task.priority]}`}>
             {task.priority}
           </span>
-          <span className="task-item__badge">{task.category}</span>
+          <span className="rounded-xl bg-badge px-3 py-1 text-xs font-medium text-badge-text">
+            {task.category}
+          </span>
         </div>
         
         {/* Блок з датами */}
-        <div className="task-item__dates" style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+        <div className="mt-3 text-xs text-muted">
           <div>Створено: {formatDate(task.createdAt)}</div>
           {task.completed && task.completedAt && (
             <div>Виконано: {formatDate(task.completedAt)}</div>
@@ -35,12 +47,15 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
         </div>
       </div>
       
-      <div className="task-item__actions">
-        <button className="task-item__btn" onClick={() => onToggle(task.id)}>
+      <div className="flex flex-col gap-2">
+        <button
+          className="rounded-md border border-border bg-surface px-4 py-2 font-medium text-text transition-colors hover:bg-hover"
+          onClick={() => onToggle(task.id)}
+        >
           {task.completed ? 'Повернути' : 'Виконати'}
         </button>
         <button 
-          className="task-item__btn task-item__btn--danger" 
+          className="rounded-md border border-danger bg-surface px-4 py-2 font-medium text-danger transition-colors hover:bg-danger hover:text-white"
           onClick={() => onDelete(task.id)}
         >
           Видалити

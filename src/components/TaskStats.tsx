@@ -10,10 +10,10 @@ export function TaskStats({ tasks }: TaskStatsProps) {
   const uncompleted = total - completed;
 
   return (
-    <div className="task-stats">
-      <span className="task-stats__item">Всього: {total}</span>
-      <span className="task-stats__item">Виконано: {completed}</span>
-      <span className="task-stats__item">Не виконано: {uncompleted}</span>
+    <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 rounded-lg bg-surface p-4 shadow-card">
+      <span className="font-medium text-text">Всього: {total}</span>
+      <span className="font-medium text-text">Виконано: {completed}</span>
+      <span className="font-medium text-text">Не виконано: {uncompleted}</span>
     </div>
   );
 }

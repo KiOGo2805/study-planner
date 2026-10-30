@@ -82,9 +82,9 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
   });
 
   return (
-    <div className="app">
+    <div className="mx-auto max-w-3xl px-4 py-8">
       <Header isDarkTheme={isDarkTheme} onToggleTheme={() => setIsDarkTheme(!isDarkTheme)} />
-      <main className="app__main">
+      <main className="flex flex-col gap-6">
         <TaskForm onAdd={addTask} existingCategories={uniqueCategories} />
         
         {/* Повернули компонент статистики згідно з вимогою */}
