@@ -2,251 +2,100 @@
   --primary: #4f46e5;
   --primary-hover: #4338ca;
   --bg-color: #f9fafb;
+  --card-bg: #ffffff;
   --text-main: #1f2937;
   --text-muted: #6b7280;
   --border: #e5e7eb;
   --danger: #ef4444;
   --danger-hover: #dc2626;
+  --input-bg: #ffffff;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+[data-theme="dark"] {
+  --bg-color: #111827;
+  --card-bg: #1f2937;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --border: #374151;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --input-bg: #374151;
 }
 
-body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-color);
+/* Заміни background: white на var(--card-bg) у .task-form, .task-list__empty, .task-item та .task-filters__btn */
+.task-form, .task-item, .task-list__empty {
+  background: var(--card-bg);
+}
+
+.task-form__input, .task-form__select, .extra-filters__select {
+  background: var(--input-bg);
   color: var(--text-main);
-  line-height: 1.5;
 }
 
-/* --- App --- */
-.app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-
-  &__main {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-}
-
-/* --- Header --- */
+/* Оновлений Header для кнопки теми */
 .header {
   margin-bottom: 2rem;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   &__title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: var(--primary);
   }
-}
 
-/* --- Task Form --- */
-.task-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  &__group {
-    flex: 1;
-    min-width: 200px;
-  }
-
-  &__input,
-  &__select {
-    width: 100%;
-    padding: 0.75rem;
+  &__theme-toggle {
+    background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-
-    &:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-  }
-
-  &__submit {
-    padding: 0.75rem 1.5rem;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 500;
-    transition: background-color 0.2s;
-
-    &:hover:not(:disabled) {
-      background-color: var(--primary-hover);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-}
-
-/* --- Task Stats --- */
-.task-stats {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  &__item {
-    font-weight: 500;
     color: var(--text-main);
-  }
-}
-
-/* --- Task Filters --- */
-.task-filters {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-
-  &__btn {
-    padding: 0.5rem 1.25rem;
-    background: white;
-    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 500;
-    color: var(--text-muted);
     transition: all 0.2s;
 
     &:hover {
       border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    &--active {
-      background-color: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      
-      &:hover {
-        color: white;
-      }
     }
   }
 }
 
-/* --- Task List --- */
-.task-list {
-  list-style: none;
+/* Контроли фільтрів */
+.controls {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
-  &__empty {
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-muted);
-    background: white;
-    border-radius: 8px;
-    border: 2px dashed var(--border);
-  }
-}
-
-/* --- Task Item --- */
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  background: white;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.2s, transform 0.2s;
+}
+
+.extra-filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
 
-  &--completed {
-    opacity: 0.7;
-    background-color: #f3f4f6;
-    
-    .task-item__title,
-    .task-item__description {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
-  }
-
-  &__content {
-    flex: 1;
-  }
-
-  &__title {
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
-  }
-
-  &__description {
-    margin-bottom: 1rem;
-    color: var(--text-muted);
-  }
-
-  &__badges {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  &__badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    background: #e5e7eb;
-    color: #374151;
-    font-weight: 500;
-
-    &--priority-low { background: #dcfce7; color: #166534; }
-    &--priority-medium { background: #fef9c3; color: #854d0e; }
-    &--priority-high { background: #fee2e2; color: #991b1b; }
-  }
-
-  &__actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  &__btn {
-    padding: 0.5rem 1rem;
+  &__select {
+    padding: 0.5rem;
     border: 1px solid var(--border);
-    background: white;
     border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s;
-
-    &:hover {
-      background: #f3f4f6;
-    }
-
-    &--danger {
-      color: var(--danger);
-      border-color: var(--danger);
-
-      &:hover {
-        background: var(--danger);
-        color: white;
-      }
-    }
+    outline: none;
   }
+
+  &__sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+}
+
+.task-filters__btn {
+  background: var(--card-bg);
 }
