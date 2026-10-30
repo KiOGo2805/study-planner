@@ -1,10 +1,12 @@
-import { type Task } from '../types/task';
+import type { Task } from '../types/task';
 
 interface TaskItemProps {
   task: Task;
+  onToggle: (id: number) => void;
+  onDelete: (id: number) => void;
 }
 
-export function TaskItem({ task }: TaskItemProps) {
+export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
   return (
     <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
       <div className="task-item__content">
@@ -18,10 +20,17 @@ export function TaskItem({ task }: TaskItemProps) {
         </div>
       </div>
       <div className="task-item__actions">
-        <button className="task-item__btn">
+        {/* Виклик onToggle з id завдання */}
+        <button className="task-item__btn" onClick={() => onToggle(task.id)}>
           {task.completed ? 'Повернути' : 'Виконати'}
         </button>
-        <button className="task-item__btn task-item__btn--danger">Видалити</button>
+        {/* Виклик onDelete з id завдання */}
+        <button 
+          className="task-item__btn task-item__btn--danger" 
+          onClick={() => onDelete(task.id)}
+        >
+          Видалити
+        </button>
       </div>
     </li>
   );

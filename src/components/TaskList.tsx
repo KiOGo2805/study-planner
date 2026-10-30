@@ -1,11 +1,13 @@
-import { type Task } from '../types/task';
+import type { Task } from '../types/task';
 import { TaskItem } from './TaskItem';
 
 interface TaskListProps {
   tasks: Task[];
+  onToggle: (id: number) => void;
+  onDelete: (id: number) => void;
 }
 
-export function TaskList({ tasks }: TaskListProps) {
+export function TaskList({ tasks, onToggle, onDelete }: TaskListProps) {
   if (tasks.length === 0) {
     return (
       <div className="task-list__empty">
@@ -17,7 +19,12 @@ export function TaskList({ tasks }: TaskListProps) {
   return (
     <ul className="task-list">
       {tasks.map((task) => (
-        <TaskItem key={task.id} task={task} />
+        <TaskItem 
+          key={task.id} 
+          task={task} 
+          onToggle={onToggle} 
+          onDelete={onDelete} 
+        />
       ))}
     </ul>
   );

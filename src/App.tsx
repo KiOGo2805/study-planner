@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Task, Priority } from './types/task';
+import type { Task } from './types/task';
 import { initialTasks } from './data/initialTasks';
 import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
@@ -10,26 +10,41 @@ import { TaskList } from './components/TaskList';
 export default function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
-  // Функція додавання завдання
   const addTask = (taskData: Omit<Task, 'id' | 'completed'>) => {
     const newTask: Task = {
       ...taskData,
-      id: Date.now(), // Генеруємо унікальний ID
-      completed: false, // Нове завдання за замовчуванням не виконане
+      id: Date.now(),
+      completed: false,
     };
-    // Імутабельне оновлення стану
     setTasks([...tasks, newTask]);
+  };
+
+  // Зміна статусу завдання (імутабельно через map)
+  const toggleTaskStatus = (id: number) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      )
+    );
+  };
+
+  // Видалення завдання (імутабельно через filter)
+  const deleteTask = (id: number) => {
+    setTasks(tasks.filter((task) => task.id !== id));
   };
 
   return (
     <div className="app">
       <Header />
       <main className="app__main">
-        {/* Передаємо функцію як prop */}
         <TaskForm onAdd={addTask} />
         <TaskStats />
         <TaskFilters />
-        <TaskList tasks={tasks} />
+        <TaskList 
+          tasks={tasks} 
+          onToggle={toggleTaskStatus} 
+          onDelete={deleteTask} 
+        />
       </main>
     </div>
   );
