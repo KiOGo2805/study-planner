@@ -21,6 +21,7 @@ export function TaskFilters({
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
   const uncompletedCount = totalCount - completedCount;
+  const hasActiveFilters = currentFilter !== 'all' || selectedCategory !== '' || sortByPriority;
 
   return (
     <div className="flex flex-col gap-4 rounded-lg bg-surface p-6 shadow-card">
@@ -80,10 +81,14 @@ export function TaskFilters({
 
         <button
           type="button"
-          className="rounded-md border border-border bg-surface px-3 py-2 text-sm text-text transition-colors hover:border-primary hover:text-primary"
+          className={`rounded-md border px-3 py-2 text-sm transition-colors ${
+            hasActiveFilters
+              ? 'border-primary bg-primary text-white hover:bg-primary-hover'
+              : 'border-border bg-surface text-text hover:border-primary hover:text-primary'
+          }`}
           onClick={onResetFilters}
         >
-          Скинути фільтри
+          {hasActiveFilters ? 'Скинути фільтри (активні)' : 'Скинути фільтри'}
         </button>
       </div>
     </div>
