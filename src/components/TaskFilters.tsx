@@ -10,12 +10,13 @@ interface TaskFiltersProps {
   onCategoryChange: (category: string) => void;
   sortByPriority: boolean;
   onSortChange: (sort: boolean) => void;
+  onResetFilters: () => void;
 }
 
 export function TaskFilters({ 
   currentFilter, onFilterChange, tasks, 
   categories, selectedCategory, onCategoryChange,
-  sortByPriority, onSortChange 
+  sortByPriority, onSortChange, onResetFilters
 }: TaskFiltersProps) {
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
@@ -64,6 +65,14 @@ export function TaskFilters({
           />
           Сортувати за пріоритетом
         </label>
+
+        <button
+          type="button"
+          className="extra-filters__reset"
+          onClick={onResetFilters}
+        >
+          Скинути фільтри
+        </button>
       </div>
     </div>
   );
