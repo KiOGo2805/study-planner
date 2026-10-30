@@ -28,13 +28,28 @@ export default function App() {
 
   const uniqueCategories = Array.from(new Set(tasks.map(t => t.category)));
 
-  const addTask = (taskData: Omit<Task, 'id' | 'completed'>) => {
-    const newTask: Task = { ...taskData, id: Date.now(), completed: false };
+const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
+    const newTask: Task = { 
+      ...taskData, 
+      id: Date.now(), 
+      completed: false,
+      createdAt: Date.now()
+    };
     setTasks([...tasks, newTask]);
   };
 
   const toggleTaskStatus = (id: number) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+    setTasks(tasks.map(t => {
+      if (t.id === id) {
+        const isNowCompleted = !t.completed;
+        return { 
+          ...t, 
+          completed: isNowCompleted,
+          completedAt: isNowCompleted ? Date.now() : undefined 
+        };
+      }
+      return t;
+    }));
   };
 
   const deleteTask = (id: number) => {
@@ -49,9 +64,22 @@ export default function App() {
     return true;
   });
 
-  if (sortByPriority) {
-    processedTasks.sort((a, b) => priorityWeight[b.priority] - priorityWeight[a.priority]);
-  }
+// Нова логіка сортування
+  processedTasks.sort((a, b) => {
+    // 1. Спочатку за статусом: виконані завжди внизу
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1;
+    }
+    
+    // 2. Якщо статус однаковий і включено сортування за пріоритетом
+    if (sortByPriority) {
+      const priorityDiff = priorityWeight[b.priority] - priorityWeight[a.priority];
+      if (priorityDiff !== 0) return priorityDiff;
+    }
+
+    // 3. За замовчуванням новіші завдання зверху
+    return b.createdAt - a.createdAt;
+  });
 
   return (
     <div className="app">

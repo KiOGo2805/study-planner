@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { Priority, Task } from '../types/task';
 
 interface TaskFormProps {
-  onAdd: (taskData: Omit<Task, 'id' | 'completed'>) => void;
+  onAdd: (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => void;
   existingCategories: string[];
 }
 
