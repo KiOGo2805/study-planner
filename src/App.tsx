@@ -4,7 +4,7 @@ import { initialTasks } from './data/initialTasks';
 import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
 import { TaskFilters } from './components/TaskFilters';
-import { TaskStats } from './components/TaskStats'; // Повернули імпорт
+import { TaskStats } from './components/TaskStats';
 import { TaskList } from './components/TaskList';
 
 export type FilterType = 'all' | 'completed' | 'uncompleted';
@@ -62,7 +62,6 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
     setTasks(tasks.filter(t => t.id !== id));
   };
 
-  // Виправлено: const замість let
   const processedTasks = tasks.filter((task) => {
     if (filter === 'completed' && !task.completed) return false;
     if (filter === 'uncompleted' && task.completed) return false;
@@ -70,20 +69,16 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
     return true;
   });
 
-// Нова логіка сортування
   processedTasks.sort((a, b) => {
-    // 1. Спочатку за статусом: виконані завжди внизу
     if (a.completed !== b.completed) {
       return a.completed ? 1 : -1;
     }
     
-    // 2. Якщо статус однаковий і включено сортування за пріоритетом
     if (sortByPriority) {
       const priorityDiff = priorityWeight[b.priority] - priorityWeight[a.priority];
       if (priorityDiff !== 0) return priorityDiff;
     }
 
-    // 3. За замовчуванням новіші завдання зверху
     return b.createdAt - a.createdAt;
   });
 
@@ -93,7 +88,6 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
       <main className="flex flex-col gap-6">
         <TaskForm onAdd={addTask} existingCategories={uniqueCategories} />
         
-        {/* Повернули компонент статистики згідно з вимогою */}
         <TaskStats tasks={tasks} />
         
         <TaskFilters 
@@ -112,7 +106,7 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
           tasks={processedTasks} 
           onToggle={toggleTaskStatus} 
           onDelete={deleteTask} 
-          hasAnyTasks={tasks.length > 0} // Передаємо індикатор наявності хоча б одного завдання
+          hasAnyTasks={tasks.length > 0}
         />
       </main>
     </div>

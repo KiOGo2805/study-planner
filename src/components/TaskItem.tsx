@@ -13,7 +13,6 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
-  // Форматуємо дати
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleString('uk-UA', { 
       day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' 
@@ -38,7 +37,6 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
           </span>
         </div>
         
-        {/* Блок з датами */}
         <div className="mt-3 text-xs text-muted">
           <div>Створено: {formatDate(task.createdAt)}</div>
           {task.completed && task.completedAt && (
