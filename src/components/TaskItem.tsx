@@ -7,7 +7,6 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
-  // Форматуємо дати
   const formatDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleString('uk-UA', { 
       day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' 
@@ -26,7 +25,6 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
           <span className="task-item__badge">{task.category}</span>
         </div>
         
-        {/* Блок з датами */}
         <div className="task-item__dates" style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
           <div>Створено: {formatDate(task.createdAt)}</div>
           {task.completed && task.completedAt && (

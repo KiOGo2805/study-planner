@@ -67,7 +67,6 @@ body {
   min-height: 100vh;
 }
 
-/* --- App --- */
 .app {
   max-width: 800px;
   margin: 0 auto;
@@ -80,7 +79,6 @@ body {
   }
 }
 
-/* --- Header --- */
 .header {
   margin-bottom: 2rem;
   display: flex;
@@ -176,7 +174,6 @@ body {
   background: var(--card-bg);
 }
 
-/* --- Task Form --- */
 .task-form {
   display: flex;
   flex-wrap: wrap;
@@ -228,7 +225,6 @@ body {
   }
 }
 
-/* --- Task Stats --- */
 .task-stats {
   display: flex;
   gap: 1.5rem;
@@ -244,7 +240,6 @@ body {
   }
 }
 
-/* --- Task Filters --- */
 .task-filters {
   display: flex;
   gap: 0.75rem;
@@ -277,7 +272,6 @@ body {
   }
 }
 
-/* --- Task List --- */
 .task-list {
   list-style: none;
   display: flex;
@@ -294,7 +288,6 @@ body {
   }
 }
 
-/* --- Task Item --- */
 .task-item {
   display: flex;
   justify-content: space-between;

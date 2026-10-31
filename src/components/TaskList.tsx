@@ -5,11 +5,10 @@ interface TaskListProps {
   tasks: Task[];
   onToggle: (id: number) => void;
   onDelete: (id: number) => void;
-  hasAnyTasks: boolean; // Новий пропс
+  hasAnyTasks: boolean;
 }
 
 export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListProps) {
-  // Якщо завдань взагалі не існує
   if (!hasAnyTasks) {
     return (
       <div className="task-list__empty">
@@ -18,7 +17,6 @@ export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListPro
     );
   }
 
-  // Якщо завдання є, але не підходять під поточні фільтри
   if (tasks.length === 0) {
     return (
       <div className="task-list__empty">
