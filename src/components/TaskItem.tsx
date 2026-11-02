@@ -20,7 +20,7 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
         <p className="task-item__description">{task.description}</p>
         <div className="task-item__badges">
           <span className={`task-item__badge task-item__badge--priority-${task.priority}`}>
-            {task.priority}
+            {task.priority === 'high' ? 'Високий' : task.priority === 'medium' ? 'Середній' : 'Низький'}
           </span>
           <span className="task-item__badge">{task.category}</span>
         </div>
