@@ -30,7 +30,7 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
         </p>
         <div className="flex flex-wrap gap-2">
           <span className={`rounded-xl px-3 py-1 text-xs font-medium ${priorityClasses[task.priority]}`}>
-            {task.priority}
+            {task.priority === 'low' ? 'Низький' : task.priority === 'medium' ? 'Середній' : 'Високий'}
           </span>
           <span className="rounded-xl bg-badge px-3 py-1 text-xs font-medium text-badge-text">
             {task.category}
