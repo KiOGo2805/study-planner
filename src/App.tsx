@@ -34,25 +34,21 @@ export default function App() {
 
   const uniqueCategories = Array.from(new Set(tasks.map(t => t.category)));
 
-const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
-    const newTask: Task = { 
-      ...taskData, 
-      id: Date.now(), 
-      completed: false,
-      createdAt: Date.now()
-    };
-    setTasks([...tasks, newTask]);
+  const addTask = (taskData: Omit<Task, 'id' | 'completed'>) => {
+    setTasks((currentTasks) => [
+      ...currentTasks,
+      {
+        ...taskData,
+        id: currentTasks.reduce((maxId, task) => Math.max(maxId, task.id), 0) + 1,
+        completed: false,
+      },
+    ]);
   };
 
   const toggleTaskStatus = (id: number) => {
     setTasks(tasks.map(t => {
       if (t.id === id) {
-        const isNowCompleted = !t.completed;
-        return { 
-          ...t, 
-          completed: isNowCompleted,
-          completedAt: isNowCompleted ? Date.now() : undefined 
-        };
+        return { ...t, completed: !t.completed };
       }
       return t;
     }));
@@ -79,7 +75,7 @@ const addTask = (taskData: Omit<Task, 'id' | 'completed' | 'createdAt'>) => {
       if (priorityDiff !== 0) return priorityDiff;
     }
 
-    return b.createdAt - a.createdAt;
+    return 0;
   });
 
   return (
