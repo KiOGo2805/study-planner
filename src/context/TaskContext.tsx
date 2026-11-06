@@ -1,0 +1,76 @@
+import { createContext, useReducer, useEffect, useState, type ReactNode } from 'react';
+import { taskReducer } from '../reducers/taskReducer';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import type { Task } from '../types/task';
+import { initialTasks } from '../data/initialTasks';
+
+export type FilterType = 'all' | 'completed' | 'uncompleted';
+
+export interface ToastInfo {
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
+interface TaskContextProps {
+  tasks: Task[];
+  filter: FilterType;
+  setFilter: (filter: FilterType) => void;
+  addTask: (taskData: Omit<Task, 'id' | 'completed' | 'isDeleting'>) => void;
+  updateTask: (task: Task) => void;
+  toggleTask: (id: number) => void;
+  requestDelete: (id: number) => void;
+  confirmDelete: (id: number) => void;
+  undoDelete: (id: number) => void;
+  clearCompleted: () => void;
+  resetTasks: () => void;
+  toast: ToastInfo | null;
+  showToast: (message: string, type?: 'success' | 'error' | 'info') => void;
+}
+
+export const TaskContext = createContext<TaskContextProps | undefined>(undefined);
+
+const initTasks = (): Task[] => {
+  try {
+    const item = window.localStorage.getItem('study-planner-tasks');
+    return item ? JSON.parse(item) : initialTasks;
+  } catch (error) {
+    console.error('Помилка читання завдань:', error);
+    return initialTasks;
+  }
+};
+
+export function TaskProvider({ children }: { children: ReactNode }) {
+  const [tasks, dispatch] = useReducer(taskReducer, [], initTasks);
+  const [filter, setFilter] = useLocalStorage<FilterType>('study-planner-filter', 'all');
+  const [toast, setToast] = useState<ToastInfo | null>(null);
+
+  useEffect(() => {
+    window.localStorage.setItem('study-planner-tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setToast({ message, type });
+  };
+
+  const contextValue: TaskContextProps = {
+    tasks,
+    filter,
+    setFilter,
+    addTask: (payload) => { dispatch({ type: 'ADD', payload }); showToast('Завдання додано', 'success'); },
+    updateTask: (payload) => { dispatch({ type: 'UPDATE', payload }); showToast('Завдання оновлено', 'success'); },
+    toggleTask: (payload) => dispatch({ type: 'TOGGLE', payload }),
+    requestDelete: (payload) => dispatch({ type: 'REQUEST_DELETE', payload }),
+    confirmDelete: (payload) => dispatch({ type: 'CONFIRM_DELETE', payload }),
+    undoDelete: (payload) => dispatch({ type: 'UNDO_DELETE', payload }),
+    clearCompleted: () => { dispatch({ type: 'CLEAR_COMPLETED' }); showToast('Виконані завдання очищено', 'info'); },
+    resetTasks: () => { dispatch({ type: 'RESET', payload: initialTasks }); showToast('Дані скинуто', 'info'); },
+    toast,
+    showToast,
+  };
+
+  return (
+    <TaskContext.Provider value={contextValue}>
+      {children}
+    </TaskContext.Provider>
+  );
+}
