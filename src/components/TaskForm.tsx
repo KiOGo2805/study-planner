@@ -1,32 +1,34 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTaskContext } from '../hooks/useTaskContext';
-import type { Priority } from '../types/task';
+import type { Priority, Task } from '../types/task';
 
 interface TaskFormProps {
   existingCategories: string[];
 }
 
 export function TaskForm({ existingCategories }: TaskFormProps) {
-  const { addTask, updateTask, editingTask, setEditingTask } = useTaskContext();
-  
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [priority, setPriority] = useState<Priority>('medium');
+  const { editingTask } = useTaskContext();
 
-  useEffect(() => {
-    if (editingTask) {
-      setTitle(editingTask.title);
-      setDescription(editingTask.description);
-      setCategory(editingTask.category);
-      setPriority(editingTask.priority);
-    } else {
-      setTitle('');
-      setDescription('');
-      setCategory('');
-      setPriority('medium');
-    }
-  }, [editingTask]);
+  return (
+    <TaskFormFields
+      key={editingTask ? `edit-${editingTask.id}` : 'new'}
+      existingCategories={existingCategories}
+      editingTask={editingTask}
+    />
+  );
+}
+
+interface TaskFormFieldsProps extends TaskFormProps {
+  editingTask: Task | null;
+}
+
+function TaskFormFields({ existingCategories, editingTask }: TaskFormFieldsProps) {
+  const { addTask, updateTask, setEditingTask } = useTaskContext();
+
+  const [title, setTitle] = useState(editingTask?.title ?? '');
+  const [description, setDescription] = useState(editingTask?.description ?? '');
+  const [category, setCategory] = useState(editingTask?.category ?? '');
+  const [priority, setPriority] = useState<Priority>(editingTask?.priority ?? 'medium');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

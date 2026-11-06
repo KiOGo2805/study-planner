@@ -1,12 +1,6 @@
-import { createContext, useContext, useEffect, type ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-
-interface ThemeContextProps {
-  isDarkTheme: boolean;
-  toggleTheme: () => void;
-}
-
-export const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+import { ThemeContext } from './themeContextValue';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDarkTheme, setIsDarkTheme] = useLocalStorage<boolean>('study-planner-theme', false);
@@ -24,12 +18,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
 }
