@@ -1,15 +1,15 @@
+import { useTaskContext } from '../hooks/useTaskContext';
 import type { Task } from '../types/task';
 
 interface TaskItemProps {
   task: Task;
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
 }
 
-export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
-  return (
-    <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
-      <div className="task-item__content">
+export function TaskItem({ task }: TaskItemProps) {
+  const { toggleTask, confirmDelete } = useTaskContext();
+    return (
+      <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
+        <div className="task-item__content">
         <h3 className="task-item__title">{task.title}</h3>
         <p className="task-item__description">{task.description}</p>
         <div className="task-item__badges">
@@ -21,12 +21,12 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
       </div>
       
       <div className="task-item__actions">
-        <button className="task-item__btn" onClick={() => onToggle(task.id)}>
+        <button className="task-item__btn" onClick={() => toggleTask(task.id)}>
           {task.completed ? 'Повернути' : 'Виконати'}
         </button>
         <button 
           className="task-item__btn task-item__btn--danger" 
-          onClick={() => onDelete(task.id)}
+          onClick={() => confirmDelete(task.id)}
         >
           Видалити
         </button>

@@ -1,10 +1,6 @@
-import type { FilterType } from '../App';
-import type { Task } from '../types/task';
+import { useTaskContext } from '../hooks/useTaskContext';
 
 interface TaskFiltersProps {
-  currentFilter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
-  tasks: Task[];
   categories: string[];
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
@@ -14,10 +10,10 @@ interface TaskFiltersProps {
 }
 
 export function TaskFilters({ 
-  currentFilter, onFilterChange, tasks, 
   categories, selectedCategory, onCategoryChange,
   sortByPriority, onSortChange, onResetFilters
 }: TaskFiltersProps) {
+  const { tasks, filter: currentFilter, setFilter: onFilterChange } = useTaskContext();
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
   const uncompletedCount = totalCount - completedCount;

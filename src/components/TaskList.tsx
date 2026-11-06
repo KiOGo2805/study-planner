@@ -3,13 +3,10 @@ import { TaskItem } from './TaskItem';
 
 interface TaskListProps {
   tasks: Task[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
   hasAnyTasks: boolean;
 }
 
-export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListProps) {
-  if (!hasAnyTasks) {
+export function TaskList({ tasks, hasAnyTasks }: TaskListProps) {  if (!hasAnyTasks) {
     return (
       <div className="task-list__empty">
         Завдань поки немає. Додайте перше навчальне завдання.
@@ -25,15 +22,10 @@ export function TaskList({ tasks, onToggle, onDelete, hasAnyTasks }: TaskListPro
     );
   }
 
-  return (
+return (
     <ul className="task-list">
       {tasks.map((task) => (
-        <TaskItem 
-          key={task.id} 
-          task={task} 
-          onToggle={onToggle} 
-          onDelete={onDelete} 
-        />
+        <TaskItem key={task.id} task={task} />
       ))}
     </ul>
   );

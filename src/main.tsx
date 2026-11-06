@@ -1,10 +1,13 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
+import { TaskProvider } from './context/TaskContext.tsx';
 import './index.scss';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
+    <TaskProvider>
+      <App />
+    </TaskProvider>
+  </StrictMode>
 );

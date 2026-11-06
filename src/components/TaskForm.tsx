@@ -1,23 +1,23 @@
 import { useState } from 'react';
-import type { Priority, Task } from '../types/task';
+import { useTaskContext } from '../hooks/useTaskContext';
+import type { Priority } from '../types/task';
 
 interface TaskFormProps {
-  onAdd: (taskData: Omit<Task, 'id' | 'completed'>) => void;
   existingCategories: string[];
 }
 
-export function TaskForm({ onAdd, existingCategories }: TaskFormProps) {
+export function TaskForm({ existingCategories }: TaskFormProps) {
+  const { addTask } = useTaskContext();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
     if (!title.trim()) return;
 
-    onAdd({
+    addTask({
       title: title.trim(),
       description: description.trim(),
       category: category.trim() || 'General',
