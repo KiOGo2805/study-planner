@@ -25,6 +25,8 @@ interface TaskContextProps {
   resetTasks: () => void;
   toast: ToastInfo | null;
   showToast: (message: string, type?: 'success' | 'error' | 'info') => void;
+  editingTask: Task | null;
+  setEditingTask: (task: Task | null) => void;
 }
 
 export const TaskContext = createContext<TaskContextProps | undefined>(undefined);
@@ -43,6 +45,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const [tasks, dispatch] = useReducer(taskReducer, [], initTasks);
   const [filter, setFilter] = useLocalStorage<FilterType>('study-planner-filter', 'all');
   const [toast, setToast] = useState<ToastInfo | null>(null);
+  
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
     window.localStorage.setItem('study-planner-tasks', JSON.stringify(tasks));
@@ -66,6 +70,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     resetTasks: () => { dispatch({ type: 'RESET', payload: initialTasks }); showToast('Дані скинуто', 'info'); },
     toast,
     showToast,
+    editingTask,
+    setEditingTask,
   };
 
   return (
