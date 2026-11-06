@@ -8,7 +8,7 @@ import type { TaskContextProps } from './taskContextValue';
 
 const initTasks = (): Task[] => {
   try {
-    const item = window.localStorage.getItem('study-planner-tasks');
+    const item = localStorage.getItem('study-planner-tasks');
     return item ? JSON.parse(item) : initialTasks;
   } catch (error) {
     console.error('Помилка читання завдань:', error);
@@ -24,7 +24,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    window.localStorage.setItem('study-planner-tasks', JSON.stringify(tasks));
+    localStorage.setItem('study-planner-tasks', JSON.stringify(tasks));
   }, [tasks]);
 
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
