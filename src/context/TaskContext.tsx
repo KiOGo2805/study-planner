@@ -74,6 +74,26 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     setEditingTask,
   };
 
+  const deletingTask = tasks.find(t => t.isDeleting);
+
+  useEffect(() => {
+    if (deletingTask) {
+      const timer = setTimeout(() => {
+        dispatch({ type: 'CONFIRM_DELETE', payload: deletingTask.id });
+        showToast('Завдання остаточно видалено', 'info');
+      }, 5000);
+      
+      return () => clearTimeout(timer); 
+    }
+  }, [deletingTask]);
+
+  useEffect(() => {
+    if (toast && !deletingTask) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast, deletingTask]);
+
   return (
     <TaskContext.Provider value={contextValue}>
       {children}

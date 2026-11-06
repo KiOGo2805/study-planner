@@ -373,4 +373,15 @@ body {
       }
     }
   }
+
+    @keyframes shrink {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
+
+  .task-item--deleting {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(100%);
+  }
 }

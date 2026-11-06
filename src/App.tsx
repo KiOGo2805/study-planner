@@ -5,6 +5,7 @@ import { TaskForm } from './components/TaskForm';
 import { TaskFilters } from './components/TaskFilters';
 import { TaskStats } from './components/TaskStats';
 import { TaskList } from './components/TaskList';
+import { Toast } from './components/Toast';
 
 const priorityWeight = { high: 3, medium: 2, low: 1 };
 
@@ -66,6 +67,7 @@ export default function App() {
           hasAnyTasks={tasks.length > 0}
         />
       </main>
+      <Toast />
     </div>
   );
 }

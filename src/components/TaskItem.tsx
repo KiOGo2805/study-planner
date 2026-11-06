@@ -6,12 +6,29 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task }: TaskItemProps) {
-  const { toggleTask, confirmDelete, setEditingTask } = useTaskContext();
+  const { toggleTask, requestDelete, setEditingTask } = useTaskContext();
+
+  const itemClasses = [
+    'task-item',
+    task.completed ? 'task-item--completed' : '',
+    task.isDeleting ? 'task-item--deleting' : ''
+  ].filter(Boolean).join(' ');
+
+  const deletingStyle: React.CSSProperties = task.isDeleting 
+    ? { opacity: 0.5, filter: 'grayscale(100%)', pointerEvents: 'none' } 
+    : {};
 
   return (
-    <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
-<div className="task-item__content">
-        <h3 className="task-item__title">{task.title}</h3>
+    <li className={itemClasses} style={deletingStyle}>
+      <div className="task-item__content">
+        <h3 className="task-item__title">
+          {task.title} 
+          {task.isDeleting && (
+            <span style={{ color: 'var(--danger)', fontSize: '0.8rem', marginLeft: '0.5rem' }}>
+              (Буде видалено...)
+            </span>
+          )}
+        </h3>
         <p className="task-item__description">{task.description}</p>
         <div className="task-item__badges">
           <span className={`task-item__badge task-item__badge--priority-${task.priority}`}>
@@ -22,16 +39,24 @@ export function TaskItem({ task }: TaskItemProps) {
       </div>
       
       <div className="task-item__actions">
-        <button className="task-item__btn" onClick={() => setEditingTask(task)}>
+        <button 
+          className="task-item__btn" 
+          onClick={() => setEditingTask(task)}
+          disabled={task.isDeleting}
+        >
           Редагувати
         </button>
-        
-        <button className="task-item__btn" onClick={() => toggleTask(task.id)}>
+        <button 
+          className="task-item__btn" 
+          onClick={() => toggleTask(task.id)}
+          disabled={task.isDeleting}
+        >
           {task.completed ? 'Повернути' : 'Виконати'}
         </button>
         <button 
           className="task-item__btn task-item__btn--danger" 
-          onClick={() => confirmDelete(task.id)}
+          onClick={() => requestDelete(task.id)}
+          disabled={task.isDeleting}
         >
           Видалити
         </button>
