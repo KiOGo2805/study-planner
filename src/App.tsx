@@ -48,6 +48,11 @@ export default function App() {
     return 0;
   });
 
+  useEffect(() => {
+    const uncompletedCount = tasks.filter(t => !t.completed).length;
+    document.title = `Study Planner | ${uncompletedCount} active tasks`;
+  }, [tasks]);
+
   return (
     <div className="app">
       <Header isDarkTheme={isDarkTheme} onToggleTheme={() => setIsDarkTheme(!isDarkTheme)} />

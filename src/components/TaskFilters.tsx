@@ -13,7 +13,8 @@ export function TaskFilters({
   categories, selectedCategory, onCategoryChange,
   sortByPriority, onSortChange, onResetFilters
 }: TaskFiltersProps) {
-  const { tasks, filter: currentFilter, setFilter: onFilterChange } = useTaskContext();
+  const { tasks, filter: currentFilter, setFilter: onFilterChange, clearCompleted, resetTasks } = useTaskContext();
+  
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
   const uncompletedCount = totalCount - completedCount;
@@ -68,9 +69,26 @@ export function TaskFilters({
           className={`extra-filters__reset ${hasActiveFilters ? 'extra-filters__reset--active' : ''}`}
           onClick={onResetFilters}
         >
-          {'Скинути фільтри'}
+          Скинути фільтри
         </button>
       </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
+        <button 
+          className="task-item__btn" 
+          onClick={clearCompleted}
+          disabled={completedCount === 0}
+        >
+          Очистити виконані
+        </button>
+        <button 
+          className="task-item__btn task-item__btn--danger" 
+          onClick={resetTasks}
+        >
+          Скинути дані
+        </button>
+      </div>
+
     </div>
   );
 }
