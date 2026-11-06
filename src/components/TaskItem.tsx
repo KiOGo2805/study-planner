@@ -7,12 +7,6 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleString('uk-UA', { 
-      day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' 
-    });
-  };
-
   return (
     <li className={`task-item ${task.completed ? 'task-item--completed' : ''}`}>
       <div className="task-item__content">
@@ -23,13 +17,6 @@ export function TaskItem({ task, onToggle, onDelete }: TaskItemProps) {
             {task.priority === 'high' ? 'Високий' : task.priority === 'medium' ? 'Середній' : 'Низький'}
           </span>
           <span className="task-item__badge">{task.category}</span>
-        </div>
-        
-        <div className="task-item__dates" style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-          <div>Створено: {formatDate(task.createdAt)}</div>
-          {task.completed && task.completedAt && (
-            <div>Виконано: {formatDate(task.completedAt)}</div>
-          )}
         </div>
       </div>
       
