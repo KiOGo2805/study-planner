@@ -7,6 +7,7 @@ import { TaskStats } from './components/TaskStats';
 import { TaskList } from './components/TaskList';
 import { Toast } from './components/Toast';
 
+
 const priorityWeight = { high: 3, medium: 2, low: 1 };
 
 export default function App() {
@@ -14,21 +15,12 @@ export default function App() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [sortByPriority, setSortByPriority] = useState(false);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   const resetFilters = () => {
     setFilter('all');
     setSelectedCategory('');
     setSortByPriority(false);
   };
-
-  useEffect(() => {
-    if (isDarkTheme) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-  }, [isDarkTheme]);
 
   const uniqueCategories = Array.from(new Set(tasks.map(t => t.category)));
 
@@ -55,7 +47,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header isDarkTheme={isDarkTheme} onToggleTheme={() => setIsDarkTheme(!isDarkTheme)} />
+      <Header />
       <main className="app__main">
         <TaskForm existingCategories={uniqueCategories} />
         <TaskStats />
