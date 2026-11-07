@@ -1,19 +1,19 @@
 import { useTaskContext } from '../hooks/useTaskContext';
 
-interface TaskFiltersProps {
-  categories: string[];
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
-  sortByPriority: boolean;
-  onSortChange: (sort: boolean) => void;
-  onResetFilters: () => void;
-}
-
-export function TaskFilters({ 
-  categories, selectedCategory, onCategoryChange,
-  sortByPriority, onSortChange, onResetFilters
-}: TaskFiltersProps) {
-  const { tasks, filter: currentFilter, setFilter: onFilterChange, clearCompleted, resetTasks } = useTaskContext();
+export function TaskFilters() {
+  const {
+    tasks,
+    categories,
+    filter: currentFilter,
+    setFilter: onFilterChange,
+    selectedCategory,
+    setSelectedCategory,
+    sortByPriority,
+    setSortByPriority,
+    resetFilters,
+    clearCompleted,
+    resetTasks,
+  } = useTaskContext();
   
   const totalCount = tasks.length;
   const completedCount = tasks.filter(t => t.completed).length;
@@ -47,7 +47,7 @@ export function TaskFilters({
         <select 
           className="extra-filters__select"
           value={selectedCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
+          onChange={(e) => setSelectedCategory(e.target.value)}
         >
           <option value="">Всі категорії</option>
           {categories.map(cat => (
@@ -59,7 +59,7 @@ export function TaskFilters({
           <input 
             type="checkbox" 
             checked={sortByPriority}
-            onChange={(e) => onSortChange(e.target.checked)}
+            onChange={(e) => setSortByPriority(e.target.checked)}
           />
           Сортувати за пріоритетом
         </label>
@@ -67,7 +67,7 @@ export function TaskFilters({
         <button
           type="button"
           className={`extra-filters__reset ${hasActiveFilters ? 'extra-filters__reset--active' : ''}`}
-          onClick={onResetFilters}
+          onClick={resetFilters}
         >
           Скинути фільтри
         </button>

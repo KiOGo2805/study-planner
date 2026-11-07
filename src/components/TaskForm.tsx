@@ -2,28 +2,23 @@ import { useState } from 'react';
 import { useTaskContext } from '../hooks/useTaskContext';
 import type { Priority, Task } from '../types/task';
 
-interface TaskFormProps {
-  existingCategories: string[];
-}
-
-export function TaskForm({ existingCategories }: TaskFormProps) {
+export function TaskForm() {
   const { editingTask } = useTaskContext();
 
   return (
     <TaskFormFields
       key={editingTask ? `edit-${editingTask.id}` : 'new'}
-      existingCategories={existingCategories}
       editingTask={editingTask}
     />
   );
 }
 
-interface TaskFormFieldsProps extends TaskFormProps {
+interface TaskFormFieldsProps {
   editingTask: Task | null;
 }
 
-function TaskFormFields({ existingCategories, editingTask }: TaskFormFieldsProps) {
-  const { addTask, updateTask, setEditingTask } = useTaskContext();
+function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
+  const { categories, addTask, updateTask, setEditingTask } = useTaskContext();
 
   const [title, setTitle] = useState(editingTask?.title ?? '');
   const [description, setDescription] = useState(editingTask?.description ?? '');
@@ -85,7 +80,7 @@ return (
             onChange={(e) => setCategory(e.target.value)}
           />
           <datalist id="category-suggestions">
-            {existingCategories.map((cat) => (
+            {categories.map((cat) => (
               <option key={cat} value={cat} />
             ))}
           </datalist>

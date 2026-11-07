@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTaskContext } from './hooks/useTaskContext';
 import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
@@ -7,38 +7,8 @@ import { TaskStats } from './components/TaskStats';
 import { TaskList } from './components/TaskList';
 import { Toast } from './components/Toast';
 
-
-const priorityWeight = { high: 3, medium: 2, low: 1 };
-
 export default function App() {
-  const { tasks, filter, setFilter } = useTaskContext();
-
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
-  const [sortByPriority, setSortByPriority] = useState(false);
-
-  const resetFilters = () => {
-    setFilter('all');
-    setSelectedCategory('');
-    setSortByPriority(false);
-  };
-
-  const uniqueCategories = Array.from(new Set(tasks.map(t => t.category)));
-
-  const processedTasks = tasks.filter((task) => {
-    if (filter === 'completed' && !task.completed) return false;
-    if (filter === 'uncompleted' && task.completed) return false;
-    if (selectedCategory && task.category !== selectedCategory) return false;
-    return true;
-  });
-
-  processedTasks.sort((a, b) => {
-    if (a.completed !== b.completed) return a.completed ? 1 : -1;
-    if (sortByPriority) {
-      const priorityDiff = priorityWeight[b.priority] - priorityWeight[a.priority];
-      if (priorityDiff !== 0) return priorityDiff;
-    }
-    return 0;
-  });
+  const { tasks } = useTaskContext();
 
   useEffect(() => {
     const uncompletedCount = tasks.filter(t => !t.completed).length;
@@ -49,20 +19,10 @@ export default function App() {
     <div className="app">
       <Header />
       <main className="app__main">
-        <TaskForm existingCategories={uniqueCategories} />
+        <TaskForm />
         <TaskStats />
-        <TaskFilters 
-          categories={uniqueCategories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          sortByPriority={sortByPriority}
-          onSortChange={setSortByPriority}
-          onResetFilters={resetFilters}
-        />
-        <TaskList 
-          tasks={processedTasks} 
-          hasAnyTasks={tasks.length > 0}
-        />
+        <TaskFilters />
+        <TaskList />
       </main>
       <Toast />
     </div>

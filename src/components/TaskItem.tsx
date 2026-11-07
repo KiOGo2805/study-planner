@@ -6,7 +6,7 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task }: TaskItemProps) {
-  const { toggleTask, requestDelete, setEditingTask } = useTaskContext();
+  const { toggleTask, requestDelete, undoDelete, setEditingTask } = useTaskContext();
 
   const itemClasses = [
     'task-item',
@@ -14,12 +14,8 @@ export function TaskItem({ task }: TaskItemProps) {
     task.isDeleting ? 'task-item--deleting' : ''
   ].filter(Boolean).join(' ');
 
-  const deletingStyle: React.CSSProperties = task.isDeleting 
-    ? { opacity: 0.5, filter: 'grayscale(100%)', pointerEvents: 'none' } 
-    : {};
-
   return (
-    <li className={itemClasses} style={deletingStyle}>
+    <li className={itemClasses}>
       <div className="task-item__content">
         <h3 className="task-item__title">
           {task.title} 
@@ -54,11 +50,10 @@ export function TaskItem({ task }: TaskItemProps) {
           {task.completed ? 'Повернути' : 'Виконати'}
         </button>
         <button 
-          className="task-item__btn task-item__btn--danger" 
-          onClick={() => requestDelete(task.id)}
-          disabled={task.isDeleting}
+          className={`task-item__btn${task.isDeleting ? ' task-item__btn--undo' : ' task-item__btn--danger'}`}
+          onClick={() => task.isDeleting ? undoDelete(task.id) : requestDelete(task.id)}
         >
-          Видалити
+          {task.isDeleting ? 'Скасувати' : 'Видалити'}
         </button>
       </div>
     </li>

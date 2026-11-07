@@ -1,12 +1,10 @@
-import type { Task } from '../types/task';
+import { useTaskContext } from '../hooks/useTaskContext';
 import { TaskItem } from './TaskItem';
 
-interface TaskListProps {
-  tasks: Task[];
-  hasAnyTasks: boolean;
-}
+export function TaskList() {
+  const { tasks, filteredTasks } = useTaskContext();
 
-export function TaskList({ tasks, hasAnyTasks }: TaskListProps) {  if (!hasAnyTasks) {
+  if (tasks.length === 0) {
     return (
       <div className="task-list__empty">
         Завдань поки немає. Додайте перше навчальне завдання.
@@ -14,7 +12,7 @@ export function TaskList({ tasks, hasAnyTasks }: TaskListProps) {  if (!hasAnyTa
     );
   }
 
-  if (tasks.length === 0) {
+  if (filteredTasks.length === 0) {
     return (
       <div className="task-list__empty">
         За цим фільтром завдань немає.
@@ -22,9 +20,9 @@ export function TaskList({ tasks, hasAnyTasks }: TaskListProps) {  if (!hasAnyTa
     );
   }
 
-return (
+  return (
     <ul className="task-list">
-      {tasks.map((task) => (
+      {filteredTasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}
     </ul>

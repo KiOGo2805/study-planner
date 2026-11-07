@@ -10,8 +10,15 @@ export interface ToastInfo {
 
 export interface TaskContextProps {
   tasks: Task[];
+  filteredTasks: Task[];
+  categories: string[];
   filter: FilterType;
   setFilter: (filter: FilterType) => void;
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+  sortByPriority: boolean;
+  setSortByPriority: (sort: boolean) => void;
+  resetFilters: () => void;
   addTask: (taskData: Omit<Task, 'id' | 'completed' | 'isDeleting'>) => void;
   updateTask: (task: Task) => void;
   toggleTask: (id: number) => void;
