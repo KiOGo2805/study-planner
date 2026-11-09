@@ -73,7 +73,7 @@ export function TaskFilters() {
         </button>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border)' }}>
+      <div className="controls__actions">
         <button 
           className="task-item__btn" 
           onClick={clearCompleted}

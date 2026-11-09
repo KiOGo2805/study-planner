@@ -58,9 +58,9 @@ function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
 
 return (
     <form className="task-form" onSubmit={handleSubmit}>
-      <div className="task-form__top-row" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', width: '100%' }}>
+      <div className="task-form__top-row">
         
-        <div className="task-form__group" style={{ flex: '1 1 30%' }}>
+        <div className="task-form__group">
           <input
             type="text"
             placeholder="Назва завдання (обов'язково)"
@@ -70,7 +70,7 @@ return (
           />
         </div>
 
-        <div className="task-form__group" style={{ flex: '1 1 30%' }}>
+        <div className="task-form__group">
           <input
             type="text"
             list="category-suggestions"
@@ -86,7 +86,7 @@ return (
           </datalist>
         </div>
 
-        <div className="task-form__group" style={{ flex: '1 1 30%' }}>
+        <div className="task-form__group">
           <select
             className="task-form__select"
             value={priority}
@@ -99,20 +99,19 @@ return (
         </div>
       </div>
 
-      <div className="task-form__bottom-row" style={{ display: 'flex', gap: '1rem', width: '100%', marginTop: '1rem', alignItems: 'flex-start' }}>
+      <div className="task-form__bottom-row">
         
-        <div className="task-form__group" style={{ flex: '1' }}>
+        <div className="task-form__group">
           <textarea
             placeholder="Опис завдання"
-            className="task-form__input"
+            className="task-form__input task-form__description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            style={{ resize: 'vertical' }}
           />
         </div>
 
-        <div className="task-form__actions" style={{ display: 'flex', gap: '1rem', flexShrink: 0 }}>
+        <div className="task-form__actions">
           <button type="submit" className="task-form__submit" disabled={!title.trim()}>
             {editingTask ? 'Зберегти зміни' : 'Додати'}
           </button>

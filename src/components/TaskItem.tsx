@@ -20,7 +20,7 @@ export function TaskItem({ task }: TaskItemProps) {
         <h3 className="task-item__title">
           {task.title} 
           {task.isDeleting && (
-            <span style={{ color: 'var(--danger)', fontSize: '0.8rem', marginLeft: '0.5rem' }}>
+            <span className="task-item__deleting-label">
               (Буде видалено...)
             </span>
           )}
