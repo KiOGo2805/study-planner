@@ -12,7 +12,7 @@ export function TaskForm({ onAdd, existingCategories }: TaskFormProps) {
   const [category, setCategory] = useState('');
   const [priority, setPriority] = useState<Priority>('medium');
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!title.trim()) return;
