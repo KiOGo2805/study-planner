@@ -1,29 +1,19 @@
 import type { Task } from '../types/task';
 
 export type TaskAction =
-  | { type: 'ADD'; payload: Omit<Task, 'id' | 'completed' | 'isDeleting'> }
-  | { type: 'TOGGLE'; payload: number }
+  | { type: 'ADD'; payload: Task } // Тепер отримує повну готову задачу з Repository
+  | { type: 'TOGGLE'; payload: Task } // Отримує оновлену задачу
   | { type: 'UPDATE'; payload: Task }
   | { type: 'REQUEST_DELETE'; payload: number }
   | { type: 'UNDO_DELETE'; payload: number }
   | { type: 'CONFIRM_DELETE'; payload: number }
-  | { type: 'CLEAR_COMPLETED' }
-  | { type: 'RESET'; payload: Task[] };
+  | { type: 'RESET'; payload: Task[] }; // Для ініціалізації масиву з API
 
 export function taskReducer(state: Task[], action: TaskAction): Task[] {
   switch (action.type) {
-    case 'ADD': {
-      const newTask: Task = {
-        ...action.payload,
-        id: state.reduce((maxId, task) => Math.max(maxId, task.id), 0) + 1,
-        completed: false,
-      };
-      return [...state, newTask];
-    }
+    case 'ADD':
+      return [action.payload, ...state]; // Додаємо нову задачу на початок списку
     case 'TOGGLE':
-      return state.map(task =>
-        task.id === action.payload ? { ...task, completed: !task.completed } : task
-      );
     case 'UPDATE':
       return state.map(task =>
         task.id === action.payload.id ? action.payload : task
@@ -38,8 +28,6 @@ export function taskReducer(state: Task[], action: TaskAction): Task[] {
       );
     case 'CONFIRM_DELETE':
       return state.filter(task => task.id !== action.payload);
-    case 'CLEAR_COMPLETED':
-      return state.filter(task => !task.completed);
     case 'RESET':
       return action.payload;
     default:
