@@ -5,19 +5,22 @@ import type { Task } from '../types/task';
 
 export function TaskDetails() {
   const { selectedTaskId, setSelectedTaskId, tasks } = useTaskContext();
-  const [taskDetails, setTaskDetails] = useState<Task | null>(null);
+  const [taskDetails, setTaskDetails] = useState<{ id: number; task: Task } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
   const abortRef = useRef<AbortController | null>(null);
+
+  const localTask = tasks.find(t => t.id === selectedTaskId);
+  const displayedTaskDetails = localTask?.isLocal
+    ? localTask
+    : taskDetails?.id === selectedTaskId ? taskDetails.task : null;
 
   useEffect(() => {
     if (!selectedTaskId) return;
 
-    const localTask = tasks.find(t => t.id === selectedTaskId);
-    if (localTask?.isLocal) {
-      setTaskDetails(localTask);
-      return;
-    }
+    const task = tasks.find(t => t.id === selectedTaskId);
+    if (task?.isLocal) return;
 
     const fetchDetails = async () => {
       if (abortRef.current) abortRef.current.abort();
@@ -30,9 +33,11 @@ export function TaskDetails() {
       try {
         const data = await taskRepository.getById(selectedTaskId, controller.signal);
         // Мерджимо серверні дані (completed, title) з локальними (description, priority)
-        setTaskDetails({ ...data, ...localTask });
-      } catch (err: any) {
-        if (err.name !== 'AbortError') setError(err.message || 'Помилка завантаження деталей');
+        setTaskDetails({ id: selectedTaskId, task: { ...data, ...task } });
+      } catch (err: unknown) {
+        if (!(err instanceof Error && err.name === 'AbortError')) {
+          setError(err instanceof Error ? err.message : 'Помилка завантаження деталей');
+        }
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
@@ -41,7 +46,7 @@ export function TaskDetails() {
     fetchDetails();
 
     return () => abortRef.current?.abort();
-  }, [selectedTaskId, tasks]);
+  }, [selectedTaskId, tasks, retryCount]);
 
   if (!selectedTaskId) return null;
 
@@ -54,24 +59,24 @@ export function TaskDetails() {
         {error && (
           <div className="state-message state-message--error">
             <p>{error}</p>
-            <button onClick={() => setSelectedTaskId(selectedTaskId)} className="task-item__btn">Спробувати ще</button>
+            <button onClick={() => setRetryCount(count => count + 1)} className="task-item__btn">Спробувати ще</button>
           </div>
         )}
         
-        {!loading && !error && taskDetails && (
+        {!loading && !error && displayedTaskDetails && (
           <>
-            <h2 className="task-details__title">{taskDetails.title}</h2>
+            <h2 className="task-details__title">{displayedTaskDetails.title}</h2>
             <div className="task-details__badges">
-              <span className="task-item__badge">{taskDetails.category}</span>
-              <span className={`task-item__badge task-item__badge--priority-${taskDetails.priority}`}>
-                {taskDetails.priority}
+              <span className="task-item__badge">{displayedTaskDetails.category}</span>
+              <span className={`task-item__badge task-item__badge--priority-${displayedTaskDetails.priority}`}>
+                {displayedTaskDetails.priority}
               </span>
               <span className="task-item__badge">
-                {taskDetails.completed ? 'Виконано' : 'В процесі'}
+                {displayedTaskDetails.completed ? 'Виконано' : 'В процесі'}
               </span>
             </div>
             <p className="task-details__desc">
-              {taskDetails.description || 'Опис відсутній'}
+              {displayedTaskDetails.description || 'Опис відсутній'}
             </p>
           </>
         )}

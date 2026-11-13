@@ -10,6 +10,14 @@ const priorityWeight: Record<Priority, number> = { high: 3, medium: 2, low: 1 };
 const LIMIT = 10;
 const DELETE_UNDO_DELAY = 5000;
 
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback;
+}
+
+function isAbortError(error: unknown) {
+  return error instanceof Error && error.name === 'AbortError';
+}
+
 export function TaskProvider({ children }: { children: ReactNode }) {
   const [tasks, dispatch] = useReducer(taskReducer, []);
   const [filter, setFilter] = useLocalStorage<FilterType>('study-planner-filter', 'all');
@@ -58,9 +66,9 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       const { tasks: fetchedTasks, total: fetchedTotal } = await taskRepository.getAll(LIMIT, skip, controller.signal);
       dispatch({ type: 'RESET', payload: fetchedTasks });
       setTotal(fetchedTotal);
-    } catch (err: any) {
-      if (err.name !== 'AbortError') {
-        setError(err.message || 'Не вдалося завантажити завдання');
+    } catch (err: unknown) {
+      if (!isAbortError(err)) {
+        setError(getErrorMessage(err, 'Не вдалося завантажити завдання'));
       }
     } finally {
       if (!controller.signal.aborted) {
@@ -70,8 +78,14 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   }, [page]);
 
   useEffect(() => {
-    fetchTasks();
+    let cancelled = false;
+    const request = setTimeout(() => {
+      if (!cancelled) void fetchTasks();
+    }, 0);
+
     return () => {
+      cancelled = true;
+      clearTimeout(request);
       if (abortControllerRef.current) abortControllerRef.current.abort();
     };
   }, [fetchTasks]);
@@ -108,8 +122,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'ADD', payload: newTask });
         setTotal(prev => prev + 1); // Оновлюємо загальну кількість сторінок
         showToast('Завдання додано', 'success');
-      } catch (err: any) {
-        showToast(err.message || 'Помилка створення', 'error');
+      } catch (err: unknown) {
+        showToast(getErrorMessage(err, 'Помилка створення'), 'error');
       }
     },
     updateTask: async (id, patch) => {
@@ -119,8 +133,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         const updatedTask = await taskRepository.update(id, { ...task, ...patch }, task.isLocal);
         dispatch({ type: 'UPDATE', payload: updatedTask });
         showToast('Оновлено', 'success');
-      } catch (err: any) {
-        showToast(err.message || 'Помилка оновлення', 'error');
+      } catch (err: unknown) {
+        showToast(getErrorMessage(err, 'Помилка оновлення'), 'error');
       }
     },
     toggleTask: async (id) => {
@@ -129,8 +143,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       try {
         const updatedTask = await taskRepository.update(id, { ...task, completed: !task.completed }, task.isLocal);
         dispatch({ type: 'TOGGLE', payload: updatedTask });
-      } catch (err: any) {
-        showToast(err.message || 'Помилка зміни статусу', 'error');
+      } catch (err: unknown) {
+        showToast(getErrorMessage(err, 'Помилка зміни статусу'), 'error');
       }
     },
     deleteTask: async (id) => {
