@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
 import { TaskFilters } from './components/TaskFilters';
 import { TaskList } from './components/TaskList';
+import { TaskDetails } from './components/TaskDetails';
 import { Toast } from './components/Toast';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
         <TaskFilters />
         <TaskList />
       </main>
+      <TaskDetails />
       <Toast />
     </div>
   );

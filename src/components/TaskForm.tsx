@@ -2,27 +2,28 @@ import { useState } from 'react';
 import { useTaskContext } from '../hooks/useTaskContext';
 import type { Priority, Task } from '../types/task';
 
-export function TaskForm() {
-  const { selectedTaskId, tasks } = useTaskContext();
-  
-  // Якщо хочемо зберегти логіку редагування прямо у формі (замість модалки):
-  // Знайдемо, чи є вибрана для редагування задача (для зворотної сумісності)
-  const editingTask = tasks.find(t => t.id === selectedTaskId) || null;
+interface TaskFormProps {
+  editingTask?: Task;
+  onCancel?: () => void;
+}
 
+export function TaskForm({ editingTask, onCancel }: TaskFormProps) {
   return (
     <TaskFormFields
       key={editingTask ? `edit-${editingTask.id}` : 'new'}
-      editingTask={editingTask}
+      editingTask={editingTask ?? null}
+      onCancel={onCancel}
     />
   );
 }
 
 interface TaskFormFieldsProps {
   editingTask: Task | null;
+  onCancel?: () => void;
 }
 
-function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
-  const { categories, addTask, updateTask, setSelectedTaskId } = useTaskContext();
+function TaskFormFields({ editingTask, onCancel }: TaskFormFieldsProps) {
+  const { categories, addTask, updateTask } = useTaskContext();
 
   const [title, setTitle] = useState(editingTask?.title ?? '');
   const [description, setDescription] = useState(editingTask?.description ?? '');
@@ -43,7 +44,7 @@ function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
         category: category.trim() || 'General',
         priority,
       });
-      setSelectedTaskId(null);
+      onCancel?.();
     } else {
       await addTask({
         title: title.trim(),
@@ -58,10 +59,6 @@ function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
     }
     
     setIsSubmitting(false);
-  };
-
-  const handleCancel = () => {
-    setSelectedTaskId(null);
   };
 
   return (
@@ -82,14 +79,14 @@ function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
         <div className="task-form__group">
           <input
             type="text"
-            list="category-suggestions"
+            list={`category-suggestions-${editingTask?.id ?? 'new'}`}
             placeholder="Категорія"
             className="task-form__input"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             disabled={isSubmitting}
           />
-          <datalist id="category-suggestions">
+          <datalist id={`category-suggestions-${editingTask?.id ?? 'new'}`}>
             {categories.map((cat) => (
               <option key={cat} value={cat} />
             ))}
@@ -128,7 +125,7 @@ function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
             {isSubmitting ? 'Збереження...' : (editingTask ? 'Зберегти зміни' : 'Додати')}
           </button>
           {editingTask && (
-            <button type="button" className="task-form__btn" onClick={handleCancel} disabled={isSubmitting}>
+            <button type="button" className="task-item__btn" onClick={onCancel} disabled={isSubmitting}>
               Скасувати
             </button>
           )}
