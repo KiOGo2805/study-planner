@@ -3,7 +3,11 @@ import { useTaskContext } from '../hooks/useTaskContext';
 import type { Priority, Task } from '../types/task';
 
 export function TaskForm() {
-  const { editingTask } = useTaskContext();
+  const { selectedTaskId, tasks } = useTaskContext();
+  
+  // Якщо хочемо зберегти логіку редагування прямо у формі (замість модалки):
+  // Знайдемо, чи є вибрана для редагування задача (для зворотної сумісності)
+  const editingTask = tasks.find(t => t.id === selectedTaskId) || null;
 
   return (
     <TaskFormFields
@@ -18,28 +22,30 @@ interface TaskFormFieldsProps {
 }
 
 function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
-  const { categories, addTask, updateTask, setEditingTask } = useTaskContext();
+  const { categories, addTask, updateTask, setSelectedTaskId } = useTaskContext();
 
   const [title, setTitle] = useState(editingTask?.title ?? '');
   const [description, setDescription] = useState(editingTask?.description ?? '');
   const [category, setCategory] = useState(editingTask?.category ?? '');
   const [priority, setPriority] = useState<Priority>(editingTask?.priority ?? 'medium');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || isSubmitting) return;
+
+    setIsSubmitting(true);
 
     if (editingTask) {
-      updateTask({
-        ...editingTask,
+      await updateTask(editingTask.id, {
         title: title.trim(),
         description: description.trim(),
         category: category.trim() || 'General',
         priority,
       });
-      setEditingTask(null);
+      setSelectedTaskId(null);
     } else {
-      addTask({
+      await addTask({
         title: title.trim(),
         description: description.trim(),
         category: category.trim() || 'General',
@@ -50,13 +56,15 @@ function TaskFormFields({ editingTask }: TaskFormFieldsProps) {
       setCategory('');
       setPriority('medium');
     }
+    
+    setIsSubmitting(false);
   };
 
   const handleCancel = () => {
-    setEditingTask(null);
+    setSelectedTaskId(null);
   };
 
-return (
+  return (
     <form className="task-form" onSubmit={handleSubmit}>
       <div className="task-form__top-row">
         
@@ -67,6 +75,7 @@ return (
             className="task-form__input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            disabled={isSubmitting}
           />
         </div>
 
@@ -78,6 +87,7 @@ return (
             className="task-form__input"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            disabled={isSubmitting}
           />
           <datalist id="category-suggestions">
             {categories.map((cat) => (
@@ -91,6 +101,7 @@ return (
             className="task-form__select"
             value={priority}
             onChange={(e) => setPriority(e.target.value as Priority)}
+            disabled={isSubmitting}
           >
             <option value="low">Низький</option>
             <option value="medium">Середній</option>
@@ -108,15 +119,16 @@ return (
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
+            disabled={isSubmitting}
           />
         </div>
 
         <div className="task-form__actions">
-          <button type="submit" className="task-form__submit" disabled={!title.trim()}>
-            {editingTask ? 'Зберегти зміни' : 'Додати'}
+          <button type="submit" className="task-form__submit" disabled={!title.trim() || isSubmitting}>
+            {isSubmitting ? 'Збереження...' : (editingTask ? 'Зберегти зміни' : 'Додати')}
           </button>
           {editingTask && (
-            <button type="button" className="task-form__btn" onClick={handleCancel}>
+            <button type="button" className="task-form__btn" onClick={handleCancel} disabled={isSubmitting}>
               Скасувати
             </button>
           )}

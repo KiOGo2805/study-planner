@@ -8,7 +8,7 @@ export function TaskStats() {
 
   return (
     <div className="task-stats">
-      <span className="task-stats__item">Всього: {totalCount}</span>
+      <span className="task-stats__item">На сторінці: {totalCount}</span>
       <span className="task-stats__item">Виконано: {completedCount}</span>
       <span className="task-stats__item">Не виконано: {uncompletedCount}</span>
     </div>

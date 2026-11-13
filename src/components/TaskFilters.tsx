@@ -11,8 +11,6 @@ export function TaskFilters() {
     sortByPriority,
     setSortByPriority,
     resetFilters,
-    clearCompleted,
-    resetTasks,
   } = useTaskContext();
   
   const totalCount = tasks.length;
@@ -72,23 +70,6 @@ export function TaskFilters() {
           Скинути фільтри
         </button>
       </div>
-
-      <div className="controls__actions">
-        <button 
-          className="task-item__btn" 
-          onClick={clearCompleted}
-          disabled={completedCount === 0}
-        >
-          Очистити виконані
-        </button>
-        <button 
-          className="task-item__btn task-item__btn--danger" 
-          onClick={resetTasks}
-        >
-          Скинути дані
-        </button>
-      </div>
-
     </div>
   );
 }

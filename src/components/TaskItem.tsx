@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTaskContext } from '../hooks/useTaskContext';
 import type { Task } from '../types/task';
 
@@ -6,7 +7,22 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task }: TaskItemProps) {
-  const { toggleTask, requestDelete, undoDelete, setEditingTask } = useTaskContext();
+  const { toggleTask, deleteTask, setSelectedTaskId } = useTaskContext();
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleToggle = async () => {
+    setIsProcessing(true);
+    await toggleTask(task.id);
+    setIsProcessing(false);
+  };
+
+  const handleDelete = async () => {
+    setIsProcessing(true);
+    await deleteTask(task.id);
+    // isProcessing не знімаємо, якщо компонент успішно демонтується
+    if (task.isDeleting) setIsProcessing(false); 
+  };
 
   const itemClasses = [
     'task-item',
@@ -17,11 +33,15 @@ export function TaskItem({ task }: TaskItemProps) {
   return (
     <li className={itemClasses}>
       <div className="task-item__content">
-        <h3 className="task-item__title">
+        <h3 
+          className="task-item__title" 
+          onClick={() => !task.isDeleting && setSelectedTaskId(task.id)}
+          title="Натисніть для перегляду деталей"
+        >
           {task.title} 
           {task.isDeleting && (
             <span className="task-item__deleting-label">
-              (Буде видалено...)
+              (Видаляється...)
             </span>
           )}
         </h3>
@@ -35,26 +55,40 @@ export function TaskItem({ task }: TaskItemProps) {
       </div>
       
       <div className="task-item__actions">
-        <button 
-          className="task-item__btn" 
-          onClick={() => setEditingTask(task)}
-          disabled={task.isDeleting}
-        >
-          Редагувати
-        </button>
-        <button 
-          className="task-item__btn" 
-          onClick={() => toggleTask(task.id)}
-          disabled={task.isDeleting}
-        >
-          {task.completed ? 'Повернути' : 'Виконати'}
-        </button>
-        <button 
-          className={`task-item__btn${task.isDeleting ? ' task-item__btn--undo' : ' task-item__btn--danger'}`}
-          onClick={() => task.isDeleting ? undoDelete(task.id) : requestDelete(task.id)}
-        >
-          {task.isDeleting ? 'Скасувати' : 'Видалити'}
-        </button>
+        {isConfirmingDelete ? (
+          <>
+            <button className="task-item__btn task-item__btn--danger" onClick={handleDelete} disabled={isProcessing}>
+              {isProcessing ? '...' : 'Підтвердити'}
+            </button>
+            <button className="task-item__btn" onClick={() => setIsConfirmingDelete(false)} disabled={isProcessing}>
+              Скасувати
+            </button>
+          </>
+        ) : (
+          <>
+            <button 
+              className="task-item__btn" 
+              onClick={() => setSelectedTaskId(task.id)} // Тепер це відкриває Деталі, звідки можна правити
+              disabled={task.isDeleting || isProcessing}
+            >
+              Деталі
+            </button>
+            <button 
+              className="task-item__btn" 
+              onClick={handleToggle}
+              disabled={task.isDeleting || isProcessing}
+            >
+              {task.completed ? 'Повернути' : 'Виконати'}
+            </button>
+            <button 
+              className="task-item__btn task-item__btn--danger"
+              onClick={() => setIsConfirmingDelete(true)}
+              disabled={task.isDeleting || isProcessing}
+            >
+              Видалити
+            </button>
+          </>
+        )}
       </div>
     </li>
   );
