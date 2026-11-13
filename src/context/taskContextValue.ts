@@ -28,6 +28,8 @@ export interface TaskContextProps {
   updateTask: (id: number, patch: Partial<Task>) => Promise<void>;
   toggleTask: (id: number) => Promise<void>;
   deleteTask: (id: number) => Promise<void>;
+  confirmDelete: (id: number) => Promise<void>;
+  undoDelete: (id: number) => void;
 
   // UI state
   toast: ToastInfo | null;

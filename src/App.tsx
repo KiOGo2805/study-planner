@@ -3,7 +3,6 @@ import { useTaskContext } from './hooks/useTaskContext';
 import { Header } from './components/Header';
 import { TaskForm } from './components/TaskForm';
 import { TaskFilters } from './components/TaskFilters';
-import { TaskStats } from './components/TaskStats';
 import { TaskList } from './components/TaskList';
 import { Toast } from './components/Toast';
 
@@ -20,7 +19,6 @@ export default function App() {
       <Header />
       <main className="app__main">
         <TaskForm />
-        <TaskStats />
         <TaskFilters />
         <TaskList />
       </main>

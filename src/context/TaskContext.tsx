@@ -4,10 +4,11 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { taskRepository } from '../repositories/taskRepository';
 import { TaskContext, type FilterType, type ToastInfo } from './taskContextValue';
 import type { TaskContextProps } from './taskContextValue';
-import type { Priority } from '../types/task';
+import type { Priority, Task } from '../types/task';
 
 const priorityWeight: Record<Priority, number> = { high: 3, medium: 2, low: 1 };
 const LIMIT = 10;
+const DELETE_UNDO_DELAY = 5000;
 
 export function TaskProvider({ children }: { children: ReactNode }) {
   const [tasks, dispatch] = useReducer(taskReducer, []);
@@ -24,10 +25,23 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const [total, setTotal] = useState(0);
 
   const abortControllerRef = useRef<AbortController | null>(null);
+  const pendingDeleteTimersRef = useRef(new Map<number, ReturnType<typeof setTimeout>>());
 
   const showToast = useCallback((message: string, type: 'success' | 'error' | 'info' = 'info') => {
     setToast({ message, type });
   }, []);
+
+  const finalizeDelete = async (id: number, task: Task) => {
+    try {
+      await taskRepository.delete(id, task.isLocal);
+      dispatch({ type: 'CONFIRM_DELETE', payload: id });
+      setTotal(prev => Math.max(0, prev - 1));
+      showToast('Видалено', 'info');
+    } catch (err: unknown) {
+      dispatch({ type: 'UNDO_DELETE', payload: id });
+      showToast(err instanceof Error ? err.message : 'Помилка видалення', 'error');
+    }
+  };
 
   const fetchTasks = useCallback(async () => {
     if (abortControllerRef.current) {
@@ -92,6 +106,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       try {
         const newTask = await taskRepository.create(payload);
         dispatch({ type: 'ADD', payload: newTask });
+        setTotal(prev => prev + 1); // Оновлюємо загальну кількість сторінок
         showToast('Завдання додано', 'success');
       } catch (err: any) {
         showToast(err.message || 'Помилка створення', 'error');
@@ -120,16 +135,28 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     },
     deleteTask: async (id) => {
       const task = tasks.find(t => t.id === id);
-      if (!task) return;
-      dispatch({ type: 'REQUEST_DELETE', payload: id }); // Одразу показуємо стан видалення
-      try {
-        await taskRepository.delete(id, task.isLocal);
-        dispatch({ type: 'CONFIRM_DELETE', payload: id });
-        showToast('Видалено', 'info');
-      } catch (err: any) {
-        dispatch({ type: 'UNDO_DELETE', payload: id }); // Відкат у разі помилки
-        showToast(err.message || 'Помилка видалення', 'error');
-      }
+      if (!task || task.isDeleting) return;
+      dispatch({ type: 'REQUEST_DELETE', payload: id });
+      const timer = setTimeout(() => {
+        pendingDeleteTimersRef.current.delete(id);
+        void finalizeDelete(id, task);
+      }, DELETE_UNDO_DELAY);
+      pendingDeleteTimersRef.current.set(id, timer);
+    },
+    confirmDelete: async (id) => {
+      const task = tasks.find(t => t.id === id);
+      const timer = pendingDeleteTimersRef.current.get(id);
+      if (!task || !timer) return;
+      clearTimeout(timer);
+      pendingDeleteTimersRef.current.delete(id);
+      await finalizeDelete(id, task);
+    },
+    undoDelete: (id) => {
+      const timer = pendingDeleteTimersRef.current.get(id);
+      if (!timer) return;
+      clearTimeout(timer);
+      pendingDeleteTimersRef.current.delete(id);
+      dispatch({ type: 'UNDO_DELETE', payload: id });
     },
     
     toast, showToast,
@@ -142,6 +169,11 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       return () => clearTimeout(timer);
     }
   }, [toast]);
+
+  useEffect(() => () => {
+    pendingDeleteTimersRef.current.forEach(timer => clearTimeout(timer));
+    pendingDeleteTimersRef.current.clear();
+  }, []);
 
   return <TaskContext.Provider value={contextValue}>{children}</TaskContext.Provider>;
 }

@@ -1,7 +1,7 @@
 import { useTaskContext } from '../hooks/useTaskContext';
 
 export function Toast() {
-  const { toast, tasks, undoDelete } = useTaskContext();
+  const { toast, tasks, confirmDelete, undoDelete } = useTaskContext();
   const deletingTasks = tasks.filter(task => task.isDeleting);
 
   if (!toast && deletingTasks.length === 0) return null;
@@ -14,12 +14,20 @@ export function Toast() {
             <span className="toast-card__title">
               «{task.title}» буде видалено
             </span>
-            <button
-              className="toast-card__button"
-              onClick={() => undoDelete(task.id)}
-            >
-              Скасувати
-            </button>
+            <div className="toast-card__actions">
+              <button
+                className="toast-card__button toast-card__button--confirm"
+                onClick={() => void confirmDelete(task.id)}
+              >
+                Підтвердити
+              </button>
+              <button
+                className="toast-card__button"
+                onClick={() => undoDelete(task.id)}
+              >
+                Скасувати
+              </button>
+            </div>
           </div>
           <div className="toast-card__progress">
             <div className="toast-card__progress-bar" />

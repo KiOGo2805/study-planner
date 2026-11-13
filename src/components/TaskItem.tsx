@@ -8,7 +8,6 @@ interface TaskItemProps {
 
 export function TaskItem({ task }: TaskItemProps) {
   const { toggleTask, deleteTask, setSelectedTaskId } = useTaskContext();
-  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleToggle = async () => {
@@ -19,9 +18,11 @@ export function TaskItem({ task }: TaskItemProps) {
 
   const handleDelete = async () => {
     setIsProcessing(true);
-    await deleteTask(task.id);
-    // isProcessing не знімаємо, якщо компонент успішно демонтується
-    if (task.isDeleting) setIsProcessing(false); 
+    try {
+      await deleteTask(task.id);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const itemClasses = [
@@ -55,40 +56,27 @@ export function TaskItem({ task }: TaskItemProps) {
       </div>
       
       <div className="task-item__actions">
-        {isConfirmingDelete ? (
-          <>
-            <button className="task-item__btn task-item__btn--danger" onClick={handleDelete} disabled={isProcessing}>
-              {isProcessing ? '...' : 'Підтвердити'}
-            </button>
-            <button className="task-item__btn" onClick={() => setIsConfirmingDelete(false)} disabled={isProcessing}>
-              Скасувати
-            </button>
-          </>
-        ) : (
-          <>
-            <button 
-              className="task-item__btn" 
-              onClick={() => setSelectedTaskId(task.id)} // Тепер це відкриває Деталі, звідки можна правити
-              disabled={task.isDeleting || isProcessing}
-            >
-              Деталі
-            </button>
-            <button 
-              className="task-item__btn" 
-              onClick={handleToggle}
-              disabled={task.isDeleting || isProcessing}
-            >
-              {task.completed ? 'Повернути' : 'Виконати'}
-            </button>
-            <button 
-              className="task-item__btn task-item__btn--danger"
-              onClick={() => setIsConfirmingDelete(true)}
-              disabled={task.isDeleting || isProcessing}
-            >
-              Видалити
-            </button>
-          </>
-        )}
+        <button
+          className="task-item__btn"
+          onClick={() => setSelectedTaskId(task.id)} // Тепер це відкриває Деталі, звідки можна правити
+          disabled={task.isDeleting || isProcessing}
+        >
+          Деталі
+        </button>
+        <button
+          className="task-item__btn"
+          onClick={handleToggle}
+          disabled={task.isDeleting || isProcessing}
+        >
+          {task.completed ? 'Повернути' : 'Виконати'}
+        </button>
+        <button
+          className="task-item__btn task-item__btn--danger"
+          onClick={handleDelete}
+          disabled={task.isDeleting || isProcessing}
+        >
+          Видалити
+        </button>
       </div>
     </li>
   );

@@ -12,7 +12,8 @@ export type TaskAction =
 export function taskReducer(state: Task[], action: TaskAction): Task[] {
   switch (action.type) {
     case 'ADD':
-      return [action.payload, ...state]; // Додаємо нову задачу на початок списку
+      // Додаємо на початок і жорстко обрізаємо до 10 елементів
+      return [action.payload, ...state].slice(0, 10);
     case 'TOGGLE':
     case 'UPDATE':
       return state.map(task =>
