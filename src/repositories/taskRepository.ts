@@ -8,7 +8,7 @@ function toTask(todo: ApiTodo): Task {
     description: '', // dummyjson не повертає це поле
     completed: todo.completed,
     priority: 'medium', // дефолтне значення
-    category: 'General', // дефолтне значення
+    category: 'Api', // дефолтне значення
   };
 }
 
@@ -62,7 +62,7 @@ export const taskRepository = {
       ...toTask(data),
       description: task.description || '',
       priority: task.priority || 'medium',
-      category: task.category || 'General',
+      category: task.category || 'Api',
       isLocal,
     };
   },
