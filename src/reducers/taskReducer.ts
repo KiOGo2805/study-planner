@@ -1,18 +1,17 @@
 import type { Task } from '../types/task';
 
 export type TaskAction =
-  | { type: 'ADD'; payload: Task } // Тепер отримує повну готову задачу з Repository
-  | { type: 'TOGGLE'; payload: Task } // Отримує оновлену задачу
+  | { type: 'ADD'; payload: Task }
+  | { type: 'TOGGLE'; payload: Task }
   | { type: 'UPDATE'; payload: Task }
   | { type: 'REQUEST_DELETE'; payload: number }
   | { type: 'UNDO_DELETE'; payload: number }
   | { type: 'CONFIRM_DELETE'; payload: number }
-  | { type: 'RESET'; payload: Task[] }; // Для ініціалізації масиву з API
+  | { type: 'RESET'; payload: Task[] };
 
 export function taskReducer(state: Task[], action: TaskAction): Task[] {
   switch (action.type) {
     case 'ADD':
-      // Додаємо на початок і жорстко обрізаємо до 10 елементів
       return [action.payload, ...state].slice(0, 10);
     case 'TOGGLE':
     case 'UPDATE':

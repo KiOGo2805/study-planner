@@ -58,7 +58,7 @@ export function TaskItem({ task }: TaskItemProps) {
       <div className="task-item__actions">
         <button
           className="task-item__btn"
-          onClick={() => setSelectedTaskId(task.id)} // Тепер це відкриває Деталі, звідки можна правити
+          onClick={() => setSelectedTaskId(task.id)}
           disabled={task.isDeleting || isProcessing}
         >
           Деталі

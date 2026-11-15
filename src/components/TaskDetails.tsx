@@ -75,7 +75,6 @@ export function TaskDetails() {
 
       try {
         const data = await taskRepository.getById(selectedTaskId, controller.signal);
-        // Мерджимо серверні дані (completed, title) з локальними (description, priority)
         setTaskDetails({ id: selectedTaskId, task: { ...data, ...task } });
       } catch (err: unknown) {
         if (!(err instanceof Error && err.name === 'AbortError')) {

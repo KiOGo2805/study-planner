@@ -5,10 +5,10 @@ function toTask(todo: ApiTodo): Task {
   return {
     id: todo.id,
     title: todo.todo,
-    description: '', // dummyjson не повертає це поле
+    description: '',
     completed: todo.completed,
-    priority: 'medium', // дефолтне значення
-    category: 'Api', // дефолтне значення
+    priority: 'medium',
+    category: 'Api',
   };
 }
 
@@ -30,11 +30,9 @@ export const taskRepository = {
     const data = await httpClient.post<ApiTodo>('/todos/add', {
       todo: task.title,
       completed: false,
-      userId: 1, // DummyJSON вимагає userId
+      userId: 1,
     });
 
-    // Оскільки DummyJSON завжди повертає id=255, генеруємо унікальний ID для нових задач,
-    // щоб не ламалися React keys і деталі задачі.
     const uniqueId = data.id === 255 ? Date.now() : data.id;
 
     return {
@@ -48,7 +46,6 @@ export const taskRepository = {
   },
 
   async update(id: number, task: Partial<Task>, isLocal?: boolean) {
-    // Якщо задача локальна (фейковий id), не робимо PATCH на сервер, щоб не було 404
     if (isLocal) {
       return { ...task, id } as Task;
     }

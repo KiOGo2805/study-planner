@@ -53,7 +53,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
 
   const fetchTasks = useCallback(async () => {
     if (abortControllerRef.current) {
-      abortControllerRef.current.abort(); // Скасовуємо попередній запит
+      abortControllerRef.current.abort();
     }
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -120,7 +120,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
       try {
         const newTask = await taskRepository.create(payload);
         dispatch({ type: 'ADD', payload: newTask });
-        setTotal(prev => prev + 1); // Оновлюємо загальну кількість сторінок
+        setTotal(prev => prev + 1);
         showToast('Завдання додано', 'success');
       } catch (err: unknown) {
         showToast(getErrorMessage(err, 'Помилка створення'), 'error');

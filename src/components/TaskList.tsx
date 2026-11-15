@@ -13,12 +13,10 @@ export function TaskList() {
     totalPages 
   } = useTaskContext();
 
-  // 1. Стан завантаження
   if (isLoading) {
     return <div className="state-message">Завантаження завдань...</div>;
   }
 
-  // 2. Стан помилки з можливістю повторити запит (вимога лаби)
   if (error) {
     return (
       <div className="state-message state-message--error">
@@ -28,7 +26,6 @@ export function TaskList() {
     );
   }
 
-  // 3. Повністю порожній список (збережено твій текст)
   if (tasks.length === 0) {
     return (
       <div className="task-list__empty">
@@ -37,7 +34,6 @@ export function TaskList() {
     );
   }
 
-  // 4. Порожній список після фільтрації (збережено твій текст)
   if (filteredTasks.length === 0) {
     return (
       <div className="task-list__empty">
@@ -46,7 +42,6 @@ export function TaskList() {
     );
   }
 
-  // 5. Успішний рендер списку з пагінацією
   return (
     <>
       <ul className="task-list">
@@ -55,7 +50,6 @@ export function TaskList() {
         ))}
       </ul>
 
-      {/* Пагінація відображається тільки якщо сторінок більше 1 */}
       {totalPages > 1 && (
         <div className="pagination">
           <button 

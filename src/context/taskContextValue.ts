@@ -15,7 +15,6 @@ export interface TaskContextProps {
   sortByPriority: boolean; setSortByPriority: (s: boolean) => void;
   resetFilters: () => void;
 
-  // Server state
   isLoading: boolean;
   error: string | null;
   fetchTasks: () => void;
@@ -23,7 +22,6 @@ export interface TaskContextProps {
   setPage: (p: number) => void;
   totalPages: number;
 
-  // Async actions
   addTask: (task: Omit<Task, 'id' | 'completed' | 'isDeleting' | 'isLocal'>) => Promise<void>;
   updateTask: (id: number, patch: Partial<Task>) => Promise<void>;
   toggleTask: (id: number) => Promise<void>;
@@ -31,7 +29,6 @@ export interface TaskContextProps {
   confirmDelete: (id: number) => Promise<void>;
   undoDelete: (id: number) => void;
 
-  // UI state
   toast: ToastInfo | null;
   showToast: (message: string, type?: ToastType) => void;
   selectedTaskId: number | null;
