@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useTaskContext } from '../hooks/useTaskContext';
 import { TaskFilters } from '../components/TaskFilters';
@@ -9,7 +9,7 @@ import type { TaskFormData } from '../schemas/taskSchema';
 import './TasksPage.scss';
 
 export function TasksPage() {
-  const { tasks, addTask, setFilter, setSelectedCategory, setSelectedPriority, setSortByPriority } = useTaskContext();
+  const { tasks, addTask } = useTaskContext();
   const { isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -20,13 +20,28 @@ export function TasksPage() {
     document.title = `Study Planner | ${uncompletedCount} active tasks`;
   }, [tasks]);
 
-  useEffect(() => {
+  const filteredTasks = useMemo(() => {
     const status = searchParams.get('status');
-    setFilter(status === 'completed' || status === 'uncompleted' ? status : 'all');
-    setSelectedCategory(searchParams.get('category') ?? '');
-    setSelectedPriority(searchParams.get('priority') ?? '');
-    setSortByPriority(searchParams.get('sort') === 'priority');
-  }, [searchParams, setFilter, setSelectedCategory, setSelectedPriority, setSortByPriority]);
+    const category = searchParams.get('category') ?? '';
+    const priority = searchParams.get('priority') ?? '';
+    const priorityWeight = { low: 1, medium: 2, high: 3 };
+
+    return tasks
+      .filter((task) => {
+        if (status === 'completed' && !task.completed) return false;
+        if (status === 'uncompleted' && task.completed) return false;
+        if (category && task.category !== category) return false;
+        if (priority && task.priority !== priority) return false;
+        return true;
+      })
+      .sort((a, b) => {
+        if (a.completed !== b.completed) return a.completed ? 1 : -1;
+        if (searchParams.get('sort') === 'priority') {
+          return priorityWeight[b.priority] - priorityWeight[a.priority];
+        }
+        return 0;
+      });
+  }, [tasks, searchParams]);
 
   const openCreateDialog = () => {
     if (!isAuthenticated) {
@@ -51,14 +66,14 @@ export function TasksPage() {
     <section className="tasks-page">
       <div className="tasks-page__header">
         <h1 className="tasks-page__title">Завдання</h1>
-        {isLoading ? null : (
+        {isLoading ? null : isAuthenticated ? (
           <button type="button" className="tasks-page__create" onClick={openCreateDialog}>
             + Створити
           </button>
-        )}
+        ) : null}
       </div>
       <TaskFilters />
-      <TaskList />
+      <TaskList filteredTasks={filteredTasks} />
       <TaskFormDialog
         open={dialogOpen}
         mode="create"

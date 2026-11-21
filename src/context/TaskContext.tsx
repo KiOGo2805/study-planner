@@ -1,12 +1,10 @@
 import { useCallback, useMemo, useReducer, useEffect, useState, useRef, type ReactNode } from 'react';
 import { taskReducer } from '../reducers/taskReducer';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { taskRepository } from '../repositories/taskRepository';
-import { TaskContext, type FilterType, type ToastInfo } from './taskContextValue';
+import { taskRepository, ensureAuthenticated } from '../repositories/taskRepository';
+import { TaskContext, type ToastInfo } from './taskContextValue';
 import type { TaskContextProps } from './taskContextValue';
-import type { Priority, Task } from '../types/task';
+import type { Task } from '../types/task';
 
-const priorityWeight: Record<Priority, number> = { high: 3, medium: 2, low: 1 };
 const LIMIT = 10;
 const DELETE_UNDO_DELAY = 5000;
 
@@ -20,10 +18,6 @@ function isAbortError(error: unknown) {
 
 export function TaskProvider({ children }: { children: ReactNode }) {
   const [tasks, dispatch] = useReducer(taskReducer, []);
-  const [filter, setFilter] = useLocalStorage<FilterType>('study-planner-filter', 'all');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedPriority, setSelectedPriority] = useState('');
-  const [sortByPriority, setSortByPriority] = useState(false);
   
   const [toast, setToast] = useState<ToastInfo | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
@@ -92,29 +86,8 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   }, [fetchTasks]);
 
   const categories = useMemo(() => Array.from(new Set(tasks.map(t => t.category))), [tasks]);
-  const filteredTasks = useMemo(() => {
-    return tasks
-      .filter((task) => {
-        if (filter === 'completed' && !task.completed) return false;
-        if (filter === 'uncompleted' && task.completed) return false;
-        if (selectedCategory && task.category !== selectedCategory) return false;
-        if (selectedPriority && task.priority !== selectedPriority) return false;
-        return true;
-      })
-      .sort((a, b) => {
-        if (a.completed !== b.completed) return a.completed ? 1 : -1;
-        if (sortByPriority) return priorityWeight[b.priority] - priorityWeight[a.priority];
-        return 0;
-      });
-  }, [tasks, filter, selectedCategory, selectedPriority, sortByPriority]);
-
   const contextValue: TaskContextProps = {
-    tasks, filteredTasks, categories,
-    filter, setFilter,
-    selectedCategory, setSelectedCategory,
-    sortByPriority, setSortByPriority,
-    selectedPriority, setSelectedPriority,
-    resetFilters: () => { setFilter('all'); setSelectedCategory(''); setSelectedPriority(''); setSortByPriority(false); },
+    tasks, categories,
     
     isLoading, error, fetchTasks,
     page, setPage, totalPages: Math.ceil(total / LIMIT),
@@ -155,6 +128,12 @@ export function TaskProvider({ children }: { children: ReactNode }) {
     deleteTask: async (id) => {
       const task = tasks.find(t => t.id === id);
       if (!task || task.isDeleting) return;
+      try {
+        ensureAuthenticated();
+      } catch (err: unknown) {
+        showToast(getErrorMessage(err, 'Необхідна авторизація'), 'error');
+        return;
+      }
       dispatch({ type: 'REQUEST_DELETE', payload: id });
       const timer = setTimeout(() => {
         pendingDeleteTimersRef.current.delete(id);

@@ -7,14 +7,7 @@ export interface ToastInfo { message: string; type: ToastType; }
 
 export interface TaskContextProps {
   tasks: Task[];
-  filteredTasks: Task[];
   categories: string[];
-  
-  filter: FilterType; setFilter: (f: FilterType) => void;
-  selectedCategory: string; setSelectedCategory: (c: string) => void;
-  selectedPriority: string; setSelectedPriority: (p: string) => void;
-  sortByPriority: boolean; setSortByPriority: (s: boolean) => void;
-  resetFilters: () => void;
 
   isLoading: boolean;
   error: string | null;

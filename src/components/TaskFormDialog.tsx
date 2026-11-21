@@ -29,6 +29,7 @@ export function TaskFormDialog({ open, mode, task, onClose, onSubmit }: TaskForm
       priority: 'medium',
     },
   });
+  const titleRegistration = register('title');
 
   useEffect(() => {
     if (!open) return;
@@ -67,12 +68,12 @@ export function TaskFormDialog({ open, mode, task, onClose, onSubmit }: TaskForm
             <span>Назва</span>
             <input
               className="task-form-dialog__input"
-              {...register('title', {
-                setValueAs: undefined,
-              })}
+              name={titleRegistration.name}
+              onBlur={titleRegistration.onBlur}
+              onChange={titleRegistration.onChange}
               ref={(element) => {
                 titleRef.current = element;
-                register('title').ref(element);
+                titleRegistration.ref(element);
               }}
               disabled={isSubmitting}
             />

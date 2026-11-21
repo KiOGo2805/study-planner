@@ -80,20 +80,24 @@ export function TaskItem({ task }: TaskItemProps) {
         >
           Деталі
         </button>
-        <button
-          className="task-item__btn"
-          onClick={handleToggle}
-          disabled={task.isDeleting || isProcessing}
-        >
-          {task.completed ? 'Повернути' : 'Виконати'}
-        </button>
-        <button
-          className="task-item__btn task-item__btn--danger"
-          onClick={handleDelete}
-          disabled={task.isDeleting || isProcessing}
-        >
-          Видалити
-        </button>
+        {isAuthenticated && (
+          <>
+            <button
+              className="task-item__btn"
+              onClick={handleToggle}
+              disabled={task.isDeleting || isProcessing}
+            >
+              {task.completed ? 'Повернути' : 'Виконати'}
+            </button>
+            <button
+              className="task-item__btn task-item__btn--danger"
+              onClick={handleDelete}
+              disabled={task.isDeleting || isProcessing}
+            >
+              Видалити
+            </button>
+          </>
+        )}
       </div>
     </li>
   );

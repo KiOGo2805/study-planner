@@ -1,11 +1,11 @@
 import { useTaskContext } from '../hooks/useTaskContext';
 import { TaskItem } from './TaskItem';
 import './TaskList.scss';
+import type { Task } from '../types/task';
 
-export function TaskList() {
+export function TaskList({ filteredTasks }: { filteredTasks: Task[] }) {
   const { 
     tasks, 
-    filteredTasks, 
     isLoading, 
     error, 
     fetchTasks, 

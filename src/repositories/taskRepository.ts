@@ -3,7 +3,7 @@ import type { Task, ApiTodo, TodosResponse } from '../types/task';
 
 const FALLBACK_CREATED_AT = '2026-01-01T00:00:00.000Z';
 
-function ensureAuthenticated(): void {
+export function ensureAuthenticated(): void {
   const token = localStorage.getItem(TOKEN_STORAGE_KEY);
   if (!token) {
     throw new HttpError(401, 'Необхідна авторизація для виконання цієї дії');
