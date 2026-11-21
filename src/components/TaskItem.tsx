@@ -19,7 +19,7 @@ export function TaskItem({ task }: TaskItemProps) {
 
   const requireAuth = () => {
     if (!isAuthenticated) {
-      navigate('/login', { state: { from: { pathname: `/tasks/${task.id}` } } });
+      navigate('/login');
       return false;
     }
     return true;

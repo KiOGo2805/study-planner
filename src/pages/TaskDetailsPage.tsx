@@ -53,7 +53,7 @@ export function TaskDetailsPage() {
 
   const requireAuth = () => {
     if (isAuthenticated) return true;
-    navigate('/login', { state: { from: { pathname: `/tasks/${taskId}` } } });
+    navigate('/login');
     return false;
   };
 

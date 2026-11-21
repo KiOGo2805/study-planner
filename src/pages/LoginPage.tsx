@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Navigate, useLocation, useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { loginSchema, type LoginFormData } from '../schemas/authSchema';
 import { useAuth } from '../hooks/useAuth';
 import { HttpError } from '../api/httpClient';
@@ -10,11 +10,7 @@ import './LoginPage.scss';
 export function LoginPage() {
   const { login, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [serverError, setServerError] = useState<string | null>(null);
-
-  const from =
-    (location.state as { from?: { pathname?: string } } | null)?.from?.pathname || '/profile';
 
   const {
     register,
@@ -29,14 +25,14 @@ export function LoginPage() {
   });
 
   if (!isLoading && isAuthenticated) {
-    return <Navigate to={from} replace />;
+    return <Navigate to="/profile" replace />;
   }
 
   const onSubmit = async (data: LoginFormData) => {
     setServerError(null);
     try {
       await login(data);
-      navigate(from, { replace: true });
+      navigate('/profile', { replace: true });
     } catch (error) {
       if (error instanceof HttpError) {
         setServerError(error.message);

@@ -8,7 +8,7 @@ export function ProfilePage() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login', { replace: true });
+    navigate('/tasks', { replace: true });
   };
 
   return (

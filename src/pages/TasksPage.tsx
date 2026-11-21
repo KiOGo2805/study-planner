@@ -45,7 +45,7 @@ export function TasksPage() {
 
   const openCreateDialog = () => {
     if (!isAuthenticated) {
-      navigate('/login', { state: { from: { pathname: '/tasks' } }, replace: false });
+      navigate('/login');
       return;
     }
     setDialogOpen(true);

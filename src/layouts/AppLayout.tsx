@@ -10,7 +10,7 @@ export function AppLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/tasks', { replace: true });
   };
 
   const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
