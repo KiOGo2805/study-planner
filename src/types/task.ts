@@ -9,6 +9,8 @@ export interface Task {
   category: string;
   isDeleting?: boolean;
   isLocal?: boolean;
+  createdBy: string;
+  createdAt: string;
 }
 
 export type ApiTodo = {

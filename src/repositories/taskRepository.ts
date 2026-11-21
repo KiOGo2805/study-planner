@@ -3,13 +3,15 @@ import type { Task, ApiTodo, TodosResponse } from '../types/task';
 
 function toTask(todo: ApiTodo): Task {
   return {
-    id: todo.id,
-    title: todo.todo,
-    description: '',
-    completed: todo.completed,
-    priority: 'medium',
-    category: 'Api',
-  };
+  id: todo.id,
+  title: todo.todo,
+  description: '',
+  completed: todo.completed,
+  priority: 'medium',
+  category: 'Api',
+  createdBy: '',
+  createdAt: ''
+};
 }
 
 export const taskRepository = {
