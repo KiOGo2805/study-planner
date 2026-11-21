@@ -34,7 +34,7 @@ export function TaskFilters() {
           className={`task-filters__btn ${currentFilter === 'all' ? 'task-filters__btn--active' : ''}`}
           onClick={() => updateParams('status', 'all')}
         >
-          Всі тут ({totalCount})
+          Всі(на сторінці) ({totalCount})
         </button>
         <button 
           className={`task-filters__btn ${currentFilter === 'completed' ? 'task-filters__btn--active' : ''}`}

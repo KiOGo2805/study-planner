@@ -87,9 +87,6 @@ export function TaskDetailsPage() {
         <div><dt>Створив</dt><dd>{task.createdBy}</dd></div>
         <div><dt>Створено</dt><dd>{new Date(task.createdAt).toLocaleString()}</dd></div>
       </dl>
-      <p className="task-details-page__metadata-note">
-        createdBy і createdAt є client-owned metadata для задач DummyJSON.
-      </p>
       {isAuthenticated && (
         <div className="task-details-page__actions">
           <button type="button" onClick={() => void toggleTask(task.id)} className="task-details-page__button">
