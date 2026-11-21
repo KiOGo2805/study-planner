@@ -5,6 +5,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router';
 import { loginSchema, type LoginFormData } from '../schemas/authSchema';
 import { useAuth } from '../hooks/useAuth';
 import { HttpError } from '../api/httpClient';
+import './LoginPage.scss';
 
 export function LoginPage() {
   const { login, isAuthenticated, isLoading } = useAuth();

@@ -1,0 +1,35 @@
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+
+  &--completed { opacity: 0.7;
+    .task-item__title, .task-item__description { color: var(--text-muted); text-decoration: line-through; }
+  }
+  &--deleting { border: 1px dashed var(--danger);
+    .task-item__content { opacity: 0.55; filter: grayscale(100%); }
+  }
+  &__content { flex: 1; }
+  &__title { margin-bottom: 0.5rem; font-size: 1.25rem; cursor: pointer; }
+  &__deleting-label { margin-left: 0.5rem; color: var(--danger); font-size: 0.8rem; }
+  &__description { margin-bottom: 1rem; color: var(--text-muted); }
+  &__badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  &__badge { padding: 0.25rem 0.75rem; border-radius: 12px; background: var(--badge-bg); color: var(--badge-text); font-size: 0.75rem; font-weight: 500;
+    &--priority-low { background: var(--badge-low-bg); color: var(--badge-low-text); }
+    &--priority-medium { background: var(--badge-medium-bg); color: var(--badge-medium-text); }
+    &--priority-high { background: var(--badge-high-bg); color: var(--badge-high-text); }
+  }
+  &__actions { display: flex; flex-direction: column; gap: 0.5rem; }
+  &__btn { padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-main); font-weight: 500; cursor: pointer;
+    &:hover { background: var(--hover-bg); }
+    &:disabled { opacity: 0.5; cursor: not-allowed; }
+    &--danger { border-color: var(--danger); color: var(--danger);
+      &:hover { background: var(--danger); color: #fff; }
+    }
+  }
+}

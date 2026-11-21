@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
+import './ProfilePage.scss';
 
 export function ProfilePage() {
   const { user, isAuthenticated, logout } = useAuth();

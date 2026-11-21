@@ -11,6 +11,7 @@ function ensureAuthenticated(): void {
 }
 
 function toTask(todo: ApiTodo): Task {
+  // DummyJSON does not expose createdBy/createdAt. These fields are client-owned metadata.
   return {
     id: todo.id,
     title: todo.todo,

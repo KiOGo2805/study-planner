@@ -1,4 +1,5 @@
 import { useTaskContext } from '../hooks/useTaskContext';
+import './Toast.scss';
 
 export function Toast() {
   const { toast, tasks, confirmDelete, undoDelete } = useTaskContext();

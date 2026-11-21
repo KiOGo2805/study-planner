@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useTaskContext } from '../hooks/useTaskContext';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../hooks/useAuth';
+import './TaskItem.scss';
 import type { Task } from '../types/task';
 
 interface TaskItemProps {
@@ -7,16 +10,30 @@ interface TaskItemProps {
 }
 
 export function TaskItem({ task }: TaskItemProps) {
-  const { toggleTask, deleteTask, setSelectedTaskId } = useTaskContext();
+  const { toggleTask, deleteTask } = useTaskContext();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const openDetails = () => navigate(`/tasks/${task.id}`);
+
+  const requireAuth = () => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: { pathname: `/tasks/${task.id}` } } });
+      return false;
+    }
+    return true;
+  };
+
   const handleToggle = async () => {
+    if (!requireAuth()) return;
     setIsProcessing(true);
     await toggleTask(task.id);
     setIsProcessing(false);
   };
 
   const handleDelete = async () => {
+    if (!requireAuth()) return;
     setIsProcessing(true);
     try {
       await deleteTask(task.id);
@@ -36,7 +53,7 @@ export function TaskItem({ task }: TaskItemProps) {
       <div className="task-item__content">
         <h3 
           className="task-item__title" 
-          onClick={() => !task.isDeleting && setSelectedTaskId(task.id)}
+          onClick={openDetails}
           title="Натисніть для перегляду деталей"
         >
           {task.title} 
@@ -58,7 +75,7 @@ export function TaskItem({ task }: TaskItemProps) {
       <div className="task-item__actions">
         <button
           className="task-item__btn"
-          onClick={() => setSelectedTaskId(task.id)}
+          onClick={openDetails}
           disabled={task.isDeleting || isProcessing}
         >
           Деталі

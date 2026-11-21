@@ -1,0 +1,22 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__header { background: var(--card-bg); border-bottom: 1px solid var(--border); }
+  &__header-inner { max-width: 960px; margin: 0 auto; min-height: 64px; padding: 0.75rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  &__brand { color: var(--text-main); font-size: 1.25rem; font-weight: 700; text-decoration: none; margin-right: auto; }
+  &__nav { display: flex; gap: 0.5rem; }
+  &__link { color: var(--text-muted); text-decoration: none; padding: 0.5rem 0.75rem; border-radius: 6px; }
+  &__link--active { color: var(--primary); background: var(--hover-bg); }
+  &__controls, &__session { display: flex; align-items: center; gap: 0.75rem; }
+  &__username { font-weight: 600; }
+  &__theme-btn, &__auth-btn { border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-main); padding: 0.5rem 0.75rem; text-decoration: none; cursor: pointer; }
+  &__auth-btn--logout { color: var(--danger); border-color: var(--danger); }
+  &__main { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 1.5rem; }
+
+  @media (max-width: 700px) {
+    &__header-inner { flex-wrap: wrap; }
+    &__nav { order: 3; width: 100%; }
+  }
+}

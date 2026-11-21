@@ -12,6 +12,7 @@ export interface TaskContextProps {
   
   filter: FilterType; setFilter: (f: FilterType) => void;
   selectedCategory: string; setSelectedCategory: (c: string) => void;
+  selectedPriority: string; setSelectedPriority: (p: string) => void;
   sortByPriority: boolean; setSortByPriority: (s: boolean) => void;
   resetFilters: () => void;
 

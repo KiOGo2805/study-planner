@@ -1,5 +1,6 @@
 import { useTaskContext } from '../hooks/useTaskContext';
 import { TaskItem } from './TaskItem';
+import './TaskList.scss';
 
 export function TaskList() {
   const { 

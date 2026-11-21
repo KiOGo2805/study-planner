@@ -15,7 +15,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!accessToken) {
-      setIsLoading(false);
       return;
     }
 
@@ -25,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const currentUser = await httpClient.get<User>('/auth/me', controller.signal);
         setUser(currentUser);
-      } catch (err) {
+      } catch {
         if (!controller.signal.aborted) {
           localStorage.removeItem(TOKEN_STORAGE_KEY);
           setAccessToken(null);

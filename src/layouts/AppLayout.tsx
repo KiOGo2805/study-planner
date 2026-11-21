@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
+import './AppLayout.scss';
 
 export function AppLayout() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -39,6 +40,7 @@ export function AppLayout() {
               onClick={toggleTheme}
               aria-label="Перемкнути тему"
             >
+              Тема
             </button>
 
             {isAuthenticated ? (

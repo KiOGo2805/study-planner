@@ -1,0 +1,21 @@
+.task-details-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-bg);
+
+  &--error { color: var(--danger); }
+  &__back { margin-bottom: 1rem; border: 0; background: transparent; color: var(--primary); cursor: pointer; }
+  &__title { margin-bottom: 0.75rem; }
+  &__description { color: var(--text-muted); white-space: pre-wrap; }
+  &__meta { margin: 1.25rem 0; display: grid; gap: 0.75rem; }
+  &__meta div { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  &__meta dt { color: var(--text-muted); }
+  &__meta dd { margin: 0; font-weight: 600; }
+  &__metadata-note { font-size: 0.8rem; color: var(--text-muted); }
+  &__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+  &__button { border: 1px solid var(--border); border-radius: 6px; padding: 0.55rem 0.9rem; background: var(--card-bg); color: var(--text-main); cursor: pointer; }
+  &__button--danger { color: var(--danger); border-color: var(--danger); }
+}

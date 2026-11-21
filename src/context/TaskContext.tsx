@@ -22,6 +22,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
   const [tasks, dispatch] = useReducer(taskReducer, []);
   const [filter, setFilter] = useLocalStorage<FilterType>('study-planner-filter', 'all');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedPriority, setSelectedPriority] = useState('');
   const [sortByPriority, setSortByPriority] = useState(false);
   
   const [toast, setToast] = useState<ToastInfo | null>(null);
@@ -97,6 +98,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         if (filter === 'completed' && !task.completed) return false;
         if (filter === 'uncompleted' && task.completed) return false;
         if (selectedCategory && task.category !== selectedCategory) return false;
+        if (selectedPriority && task.priority !== selectedPriority) return false;
         return true;
       })
       .sort((a, b) => {
@@ -104,14 +106,15 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         if (sortByPriority) return priorityWeight[b.priority] - priorityWeight[a.priority];
         return 0;
       });
-  }, [tasks, filter, selectedCategory, sortByPriority]);
+  }, [tasks, filter, selectedCategory, selectedPriority, sortByPriority]);
 
   const contextValue: TaskContextProps = {
     tasks, filteredTasks, categories,
     filter, setFilter,
     selectedCategory, setSelectedCategory,
     sortByPriority, setSortByPriority,
-    resetFilters: () => { setFilter('all'); setSelectedCategory(''); setSortByPriority(false); },
+    selectedPriority, setSelectedPriority,
+    resetFilters: () => { setFilter('all'); setSelectedCategory(''); setSelectedPriority(''); setSortByPriority(false); },
     
     isLoading, error, fetchTasks,
     page, setPage, totalPages: Math.ceil(total / LIMIT),
@@ -124,6 +127,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         showToast('Завдання додано', 'success');
       } catch (err: unknown) {
         showToast(getErrorMessage(err, 'Помилка створення'), 'error');
+        throw err;
       }
     },
     updateTask: async (id, patch) => {
@@ -135,6 +139,7 @@ export function TaskProvider({ children }: { children: ReactNode }) {
         showToast('Оновлено', 'success');
       } catch (err: unknown) {
         showToast(getErrorMessage(err, 'Помилка оновлення'), 'error');
+        throw err;
       }
     },
     toggleTask: async (id) => {
