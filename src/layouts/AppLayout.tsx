@@ -26,10 +26,10 @@ export function AppLayout() {
         <div className="header__controls">
           <nav className="header__nav" aria-label="Головна навігація">
             <NavLink to="/tasks" className={getNavLinkClass}>
-              Tasks
+              Завдання
             </NavLink>
             <NavLink to="/profile" className={getNavLinkClass}>
-              Profile
+              Профіль
             </NavLink>
           </nav>
 

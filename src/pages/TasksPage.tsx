@@ -10,7 +10,7 @@ import './TasksPage.scss';
 
 export function TasksPage() {
   const { tasks, addTask } = useTaskContext();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -52,12 +52,16 @@ export function TasksPage() {
   };
 
   const handleCreate = async (data: TaskFormData) => {
+    const creatorName = user
+      ? [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username
+      : 'Unknown';
+
     await addTask({
       title: data.title,
       description: data.description,
       category: data.category,
       priority: data.priority,
-      createdBy: 'Authorized User',
+      createdBy: creatorName,
       createdAt: new Date().toISOString(),
     });
   };

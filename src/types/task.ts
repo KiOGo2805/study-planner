@@ -1,5 +1,6 @@
 export type Priority = 'low' | 'medium' | 'high';
 
+// DummyJSON does not expose createdBy/createdAt. These fields are client-owned metadata.
 export interface Task {
   id: number;
   title: string;
