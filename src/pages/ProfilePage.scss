@@ -12,7 +12,8 @@
   &__row { display: flex; justify-content: space-between; gap: 1rem; }
   &__label { opacity: 0.75; font-size: 0.9rem; }
   &__value { margin: 0; font-weight: 500; }
-  &__logout-btn { padding: 0.6rem 1.25rem; border: 1px solid var(--danger); border-radius: 6px; background: transparent; color: var(--danger); font-weight: 600; cursor: pointer;
+  &__logout-btn { padding: 0.6rem 1.25rem; border: 1px solid var(--danger); border-radius: 6px; background: transparent; color: var(--danger); font-weight: 600; cursor: pointer; transition: background-color 0.15s, color 0.15s;
+    &:hover { background: var(--danger); color: #fff; }
     &:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
   }
 }

@@ -4,5 +4,7 @@
 
   &__title { margin-bottom: 0.5rem; font-size: 2rem; }
   &__text { margin-bottom: 1.5rem; opacity: 0.8; }
-  &__link { display: inline-block; padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; color: var(--text-main); text-decoration: none; }
+  &__link { display: inline-block; padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; color: var(--text-main); text-decoration: none; transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    &:hover { background: var(--hover-bg); border-color: var(--primary); color: var(--primary); }
+  }
 }

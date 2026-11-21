@@ -12,7 +12,8 @@
 }
 
 .pagination { display: flex; align-items: center; justify-content: center; gap: 1rem;
-  &__btn { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-main); cursor: pointer;
+  &__btn { padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-main); cursor: pointer; transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    &:hover:not(:disabled) { background: var(--hover-bg); border-color: var(--primary); color: var(--primary); }
     &:disabled { opacity: 0.5; cursor: not-allowed; }
   }
   &__info { font-size: 0.9rem; }

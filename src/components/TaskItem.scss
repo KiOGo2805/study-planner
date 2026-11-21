@@ -15,7 +15,9 @@
     .task-item__content { opacity: 0.55; filter: grayscale(100%); }
   }
   &__content { flex: 1; }
-  &__title { margin-bottom: 0.5rem; font-size: 1.25rem; cursor: pointer; }
+  &__title { margin-bottom: 0.5rem; font-size: 1.25rem; cursor: pointer;
+    &:hover { color: var(--primary); }
+  }
   &__deleting-label { margin-left: 0.5rem; color: var(--danger); font-size: 0.8rem; }
   &__description { margin-bottom: 1rem; color: var(--text-muted); }
   &__badges { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -25,8 +27,8 @@
     &--priority-high { background: var(--badge-high-bg); color: var(--badge-high-text); }
   }
   &__actions { display: flex; flex-direction: column; gap: 0.5rem; }
-  &__btn { padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-main); font-weight: 500; cursor: pointer;
-    &:hover { background: var(--hover-bg); }
+  &__btn { padding: 0.5rem 1rem; border: 1px solid var(--border); border-radius: 6px; background: var(--card-bg); color: var(--text-main); font-weight: 500; cursor: pointer; transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    &:hover:not(:disabled) { background: var(--hover-bg); border-color: var(--primary); color: var(--primary); }
     &:disabled { opacity: 0.5; cursor: not-allowed; }
     &--danger { border-color: var(--danger); color: var(--danger);
       &:hover { background: var(--danger); color: #fff; }

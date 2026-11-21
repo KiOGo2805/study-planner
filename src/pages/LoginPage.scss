@@ -13,7 +13,8 @@
   }
   &__error { color: var(--danger); font-size: 0.825rem; }
   &__server-error { padding: 0.6rem 0.75rem; border: 1px solid var(--danger); border-radius: 6px; color: var(--danger); font-size: 0.875rem; }
-  &__submit { margin-top: 0.25rem; padding: 0.65rem 1rem; border: 1px solid var(--border); border-radius: 6px; background: var(--text-main); color: var(--bg-color); font-weight: 600; cursor: pointer;
+  &__submit { margin-top: 0.25rem; padding: 0.65rem 1rem; border: 1px solid var(--primary); border-radius: 6px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; transition: background-color 0.15s, border-color 0.15s;
+    &:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--primary-hover); }
     &:disabled { opacity: 0.6; cursor: not-allowed; }
   }
   &__hint { margin-top: 1.25rem; font-size: 0.825rem; opacity: 0.75; }

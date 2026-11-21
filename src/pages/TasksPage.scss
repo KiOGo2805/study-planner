@@ -5,5 +5,7 @@
 
   &__header { display: flex; align-items: center; justify-content: space-between; }
   &__title { font-size: 1.75rem; }
-  &__create { border: 1px solid var(--primary); border-radius: 6px; padding: 0.65rem 1rem; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; }
+  &__create { border: 1px solid var(--primary); border-radius: 6px; padding: 0.65rem 1rem; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; transition: background-color 0.15s, border-color 0.15s;
+    &:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+  }
 }

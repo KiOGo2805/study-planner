@@ -5,7 +5,7 @@ import './AppLayout.scss';
 
 export function AppLayout() {
   const { isAuthenticated, user, logout } = useAuth();
-  const { toggleTheme } = useTheme();
+  const { isDarkTheme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -14,17 +14,17 @@ export function AppLayout() {
   };
 
   const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-    isActive ? 'app-layout__link app-layout__link--active' : 'app-layout__link';
+    isActive ? 'header__link header__link--active' : 'header__link';
 
   return (
     <div className="app-layout">
-      <header className="app-layout__header">
-        <div className="app-layout__header-inner">
-          <NavLink to="/tasks" className="app-layout__brand">
-            Study Planner
-          </NavLink>
+      <header className="header">
+        <NavLink to="/tasks" className="header__brand">
+          <h1 className="header__title">Study Planner</h1>
+        </NavLink>
 
-          <nav className="app-layout__nav" aria-label="Головна навігація">
+        <div className="header__controls">
+          <nav className="header__nav" aria-label="Головна навігація">
             <NavLink to="/tasks" className={getNavLinkClass}>
               Tasks
             </NavLink>
@@ -33,33 +33,31 @@ export function AppLayout() {
             </NavLink>
           </nav>
 
-          <div className="app-layout__controls">
-            <button
-              type="button"
-              className="app-layout__theme-btn"
-              onClick={toggleTheme}
-              aria-label="Перемкнути тему"
-            >
-              Тема
-            </button>
+          <button
+            type="button"
+            className="header__theme-toggle"
+            onClick={toggleTheme}
+            aria-label="Перемкнути тему"
+          >
+            {isDarkTheme ? 'Світла тема' : 'Темна тема'}
+          </button>
 
-            {isAuthenticated ? (
-              <div className="app-layout__session">
-                <span className="app-layout__username">{user?.username}</span>
-                <button
-                  type="button"
-                  className="app-layout__auth-btn app-layout__auth-btn--logout"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <NavLink to="/login" className="app-layout__auth-btn">
-                Login
-              </NavLink>
-            )}
-          </div>
+          {isAuthenticated ? (
+            <div className="header__session">
+              <span className="header__username">{user?.username}</span>
+              <button
+                type="button"
+                className="header__auth-btn header__auth-btn--logout"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <NavLink to="/login" className="header__auth-btn">
+              Login
+            </NavLink>
+          )}
         </div>
       </header>
 

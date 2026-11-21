@@ -65,7 +65,17 @@ export function TaskFormDialog({ open, mode, task, onClose, onSubmit }: TaskForm
         <form className="task-form-dialog__form" onSubmit={handleSubmit(submit)} noValidate>
           <label className="task-form-dialog__field">
             <span>Назва</span>
-            <input ref={titleRef} className="task-form-dialog__input" {...register('title')} disabled={isSubmitting} />
+            <input
+              className="task-form-dialog__input"
+              {...register('title', {
+                setValueAs: undefined,
+              })}
+              ref={(element) => {
+                titleRef.current = element;
+                register('title').ref(element);
+              }}
+              disabled={isSubmitting}
+            />
             {errors.title && <small className="task-form-dialog__error">{errors.title.message}</small>}
           </label>
           <label className="task-form-dialog__field">

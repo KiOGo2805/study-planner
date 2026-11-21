@@ -15,7 +15,11 @@
   &__error { color: var(--danger); font-weight: 400; }
   &__actions { display: flex; justify-content: flex-end; gap: 0.75rem; }
   &__cancel, &__submit { padding: 0.65rem 1rem; border-radius: 6px; cursor: pointer; font: inherit; }
-  &__cancel { border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); }
-  &__submit { border: 1px solid var(--primary); background: var(--primary); color: #fff; }
+  &__cancel { border: 1px solid var(--border); background: var(--card-bg); color: var(--text-main); transition: background-color 0.15s, border-color 0.15s;
+    &:hover:not(:disabled) { background: var(--hover-bg); border-color: var(--primary); }
+  }
+  &__submit { border: 1px solid var(--primary); background: var(--primary); color: #fff; transition: background-color 0.15s, border-color 0.15s;
+    &:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--primary-hover); }
+  }
   &__submit:disabled, &__cancel:disabled { opacity: 0.6; cursor: not-allowed; }
 }
