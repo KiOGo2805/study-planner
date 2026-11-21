@@ -51,6 +51,8 @@ function TaskFormFields({ editingTask, onCancel }: TaskFormFieldsProps) {
         description: description.trim(),
         category: category.trim() || 'General',
         priority,
+        createdBy: '',
+        createdAt: ''
       });
       setTitle('');
       setDescription('');

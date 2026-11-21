@@ -1,6 +1,7 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
+export const TOKEN_STORAGE_KEY = 'study_planner_token';
 
 const client = axios.create({
   baseURL: BASE_URL,
@@ -8,6 +9,17 @@ const client = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+client.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 export class HttpError extends Error {
   constructor(public status: number, message: string) {
@@ -24,7 +36,14 @@ async function request<T>(config: AxiosRequestConfig): Promise<T> {
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {
-      throw new HttpError(error.response.status, `Помилка HTTP: ${error.response.status}`);
+      const serverMessage =
+        typeof error.response.data === 'object' &&
+        error.response.data !== null &&
+        'message' in error.response.data
+          ? String(error.response.data.message)
+          : `Помилка HTTP: ${error.response.status}`;
+
+      throw new HttpError(error.response.status, serverMessage);
     }
 
     throw error;
