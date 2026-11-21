@@ -1,30 +1,34 @@
-import { useEffect } from 'react';
-import { useTaskContext } from './hooks/useTaskContext';
-import { Header } from './components/Header';
-import { TaskForm } from './components/TaskForm';
-import { TaskFilters } from './components/TaskFilters';
-import { TaskList } from './components/TaskList';
-import { TaskDetails } from './components/TaskDetails';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
+import { AppLayout } from './layouts/AppLayout';
+import { ProtectedRoute } from './routes/ProtectedRoute';
+import { TasksPage } from './pages/TasksPage';
+import { TaskDetailsPage } from './pages/TaskDetailsPage';
+import { LoginPage } from './pages/LoginPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { NotFoundPage } from './pages/NotFoundPage';
 import { Toast } from './components/Toast';
 
 export default function App() {
-  const { tasks } = useTaskContext();
-
-  useEffect(() => {
-    const uncompletedCount = tasks.filter(t => !t.completed).length;
-    document.title = `Study Planner | ${uncompletedCount} active tasks`;
-  }, [tasks]);
-
   return (
-    <div className="app">
-      <Header />
-      <main className="app__main">
-        <TaskForm />
-        <TaskFilters />
-        <TaskList />
-      </main>
-      <TaskDetails />
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Navigate to="/tasks" replace />} />
+          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/tasks/:taskId" element={<TaskDetailsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
       <Toast />
-    </div>
+    </BrowserRouter>
   );
 }

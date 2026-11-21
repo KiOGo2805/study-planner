@@ -79,6 +79,127 @@ body {
   }
 }
 
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.875rem 1.5rem;
+  }
+
+  &__header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-decoration: none;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__link {
+    color: var(--text-muted, #64748b);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+    transition: background-color 0.15s, color 0.15s;
+
+    &:hover {
+      color: var(--text-main);
+    }
+
+    &--active {
+      color: var(--text-main);
+      background: var(--bg-color);
+      font-weight: 600;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__session {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__username {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  &__theme-btn,
+  &__auth-btn {
+    padding: 0.4rem 0.85rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-color);
+    color: var(--text-main);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+
+    &--logout {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+  }
+
+  &__main {
+    flex: 1;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+}
+
+.not-found {
+  text-align: center;
+  padding: 3rem 1rem;
+
+  &__title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__text {
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+  }
+
+  &__link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text-main);
+  }
+}
+
 .header {
   margin-bottom: 2rem;
   display: flex;
