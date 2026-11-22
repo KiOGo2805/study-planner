@@ -1,7 +1,11 @@
 import { useState, useEffect, type ReactNode } from 'react';
 import type { User, LoginResponse } from '../types/auth';
 import type { LoginFormData } from '../schemas/authSchema';
-import { httpClient, TOKEN_STORAGE_KEY } from '../api/httpClient';
+import {
+  httpClient,
+  registerUnauthorizedHandler,
+  TOKEN_STORAGE_KEY,
+} from '../api/httpClient';
 import { AuthContext } from './authContextValue';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -41,12 +45,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => controller.abort();
   }, [accessToken]);
+  
+  useEffect(
+    () =>
+      registerUnauthorizedHandler(() => {
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+        setAccessToken(null);
+        setUser(null);
+        setIsLoading(false);
+      }),
+    []
+  );
 
   const login = async (credentials: LoginFormData) => {
     const response = await httpClient.post<LoginResponse>('/auth/login', credentials);
 
     localStorage.setItem(TOKEN_STORAGE_KEY, response.accessToken);
     setAccessToken(response.accessToken);
+    setIsLoading(false);
     setUser({
       id: response.id,
       username: response.username,

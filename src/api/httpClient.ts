@@ -21,6 +21,27 @@ client.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let unauthorizedHandler: (() => void) | null = null;
+
+export function registerUnauthorizedHandler(handler: () => void): () => void {
+  unauthorizedHandler = handler;
+  return () => {
+    if (unauthorizedHandler === handler) {
+      unauthorizedHandler = null;
+    }
+  };
+}
+
+client.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      unauthorizedHandler?.();
+    }
+    return Promise.reject(error);
+  }
+);
+
 export class HttpError extends Error {
   constructor(public status: number, message: string) {
     super(message);

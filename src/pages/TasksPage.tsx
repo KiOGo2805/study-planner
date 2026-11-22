@@ -70,11 +70,11 @@ export function TasksPage() {
     <section className="tasks-page">
       <div className="tasks-page__header">
         <h1 className="tasks-page__title">Завдання</h1>
-        {isLoading ? null : isAuthenticated ? (
+        {isLoading ? null : (
           <button type="button" className="tasks-page__create" onClick={openCreateDialog}>
             + Створити
           </button>
-        ) : null}
+        )}
       </div>
       <TaskFilters />
       <TaskList filteredTasks={filteredTasks} />
